@@ -28,21 +28,16 @@ const cities = [
 ];
 
 const domains = [
-    'adaptiveoutput.io',
-    'resilienceworks.io',
-    'agilelabor.io',
-    'deliverableforce.com',
-    'grindpath.io',
-    'pivotlabor.com',
-    'complianceflow.io',
-    'elasticvalue.io',
-    'burnoutsolutions.com',
-    'optimetrics.io',
-    'taskvelocity.io',
-    'survivalmetrics.com',
-    'workstreamtactics.com',
-    'outputdynamics.io',
-    'resourcestretch.io'
+    'agile.io',
+    'pivot.io',
+    'grind.io',
+    'flow.io',
+    'value.io',
+    'task.io',
+    'work.io',
+    'output.io',
+    'labor.io',
+    'adapt.io'
   ];
   
 

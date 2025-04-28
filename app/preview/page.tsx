@@ -37,16 +37,18 @@ export default function PreviewPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    // Create a new URLSearchParams with all current parameters
+    const params = new URLSearchParams();
+    // Copy all parameters from the current URL
+    searchParams.forEach((value, key) => {
+      params.append(key, value);
+    });
+    router.push(`/input?${params.toString()}`);
   };
 
   return (
     <main className="min-h-screen p-4">
       <div className="max-w-2xl mx-auto space-y-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Capitalism Survival Guide</h1>
-        </div>
-
         <div id="resume-content" className="bg-white p-8 rounded-lg shadow-sm space-y-6">
           <div className="text-center">
             <p className="text-gray-600">
