@@ -216,28 +216,25 @@ function InputPageContent() {
   };
 
   return (
-    <main className="min-h-screen p-4">
+    <main className="min-h-screen p-4 sm:p-6">
       <div className="relative w-full max-w-[1200px] mx-auto">
-        <button
-          onClick={handleChangeIndustry}
-          className="fixed left-4 sm:left-8 md:left-12 lg:left-24 top-8 text-sm text-blue-600 hover:underline"
-        >
-          ← Change Industry
-        </button>
-        <div className="max-w-2xl mx-auto space-y-8">
+        <div className="mb-6 sm:mb-8">
+          <button
+            onClick={handleChangeIndustry}
+            className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 hover:underline"
+          >
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Change Industry
+          </button>
+        </div>
+        <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
           <div className="text-center space-y-4">
             <div className="flex flex-col">
-              <div className="mb-8">
-                <div className="text-center space-y-2">
-                  <h1 className="text-2xl font-bold">{applicantInfo.displayName || 'Applicant #XXXX'}</h1>
-                  <p className="text-sm text-gray-600">
-                    {applicantInfo.city || 'City'} | {applicantInfo.emailUsername || 'email@example.com'}
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 <div>
-                  <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Display Name
                   </label>
                   <input
@@ -245,12 +242,12 @@ function InputPageContent() {
                     id="displayName"
                     value={applicantInfo.displayName}
                     onChange={(e) => handleApplicantInfoChange('displayName', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                     placeholder="Enter name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     City
                   </label>
                   <input
@@ -258,12 +255,12 @@ function InputPageContent() {
                     id="city"
                     value={applicantInfo.city}
                     onChange={(e) => handleApplicantInfoChange('city', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                     placeholder="Enter city"
                   />
                 </div>
-                <div className="md:col-span-1 lg:col-span-1">
-                  <label htmlFor="emailUsername" className="block text-sm font-medium text-gray-700 mb-1">
+                <div className="sm:col-span-2 lg:col-span-1">
+                  <label htmlFor="emailUsername" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Email
                   </label>
                   <input
@@ -271,10 +268,18 @@ function InputPageContent() {
                     id="emailUsername"
                     value={applicantInfo.emailUsername}
                     onChange={(e) => handleApplicantInfoChange('emailUsername', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 text-sm"
                     placeholder="Enter email"
-                    style={{ minWidth: '100%' }}
                   />
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mb-6">
+                <div className="text-center space-y-2">
+                  <h1 className="text-xl sm:text-2xl font-bold dark:text-white">{applicantInfo.displayName || 'Applicant #XXXX'}</h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {applicantInfo.city || 'City'} | {applicantInfo.emailUsername || 'email@example.com'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -282,21 +287,21 @@ function InputPageContent() {
 
           {showConfirmDialog && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-                <h3 className="text-lg font-medium mb-4">Change Industry?</h3>
-                <p className="text-gray-600 mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 max-w-sm w-full">
+                <h3 className="text-lg font-medium mb-4 dark:text-white">Change Industry?</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
                   You have entered some information. Changing industries will reset all fields.
                 </p>
-                <div className="flex justify-end gap-4">
+                <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
                   <button
                     onClick={() => setShowConfirmDialog(false)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleConfirmChange}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
                   >
                     Change Industry
                   </button>
@@ -308,28 +313,28 @@ function InputPageContent() {
           <div className="space-y-6">
             {fields.map((field) => (
               <div key={field.id} className="space-y-2">
-                <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
+                <label htmlFor={field.id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   {field.label}
                 </label>
                 <textarea
                   id={field.id}
                   value={field.value}
                   onChange={(e) => handleFieldChange(field.id, e.target.value)}
-                  className="w-full h-32 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full h-24 sm:h-32 p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder={`Enter your ${field.label.toLowerCase()}...`}
                   disabled={loadingStates[field.id]}
                 />
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
                   <button
                     onClick={() => handleAutoFill(field.id)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
                     disabled={loadingStates[field.id]}
                   >
                     Auto-Fill
                   </button>
                   <button
                     onClick={() => handleRewrite(field.id)}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50"
                     disabled={loadingStates[field.id] || !field.value.trim()}
                   >
                     Rewrite for Survival
@@ -338,7 +343,7 @@ function InputPageContent() {
                     <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                   )}
                   {errorStates[field.id] && (
-                    <span className="text-sm text-red-600">{errorStates[field.id]}</span>
+                    <span className="text-sm text-red-600 dark:text-red-400">{errorStates[field.id]}</span>
                   )}
                 </div>
               </div>
