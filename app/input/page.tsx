@@ -13,6 +13,8 @@ export default function InputPage() {
   const industry = searchParams.get('industry') || 'tech'; // Default to tech for testing
 
   const [fields, setFields] = useState<ResumeField[]>([]);
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
+  const [errorStates, setErrorStates] = useState<Record<string, string>>({});
   const [applicantInfo, setApplicantInfo] = useState<{
     displayName: string;
     city: string;
@@ -106,9 +108,41 @@ export default function InputPage() {
     );
   };
 
-  const handleRewrite = (id: string) => {
-    // TODO: Implement rewrite functionality
-    console.log('Rewrite clicked for:', id);
+  const handleRewrite = async (id: string) => {
+    const field = fields.find(f => f.id === id);
+    if (!field || !field.value.trim()) return;
+
+    // Set loading state for this field
+    setLoadingStates(prev => ({ ...prev, [id]: true }));
+    setErrorStates(prev => ({ ...prev, [id]: '' }));
+
+    try {
+      const response = await fetch('/api/rewrite-for-survival', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: field.value,
+          industry
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Rewrite failed');
+      }
+
+      const data = await response.json();
+      
+      // Update the field with rewritten text
+      setFields(prev =>
+        prev.map(f => (f.id === id ? { ...f, value: data.rewrittenText } : f))
+      );
+    } catch (error) {
+      setErrorStates(prev => ({ ...prev, [id]: 'Rewrite failed, please try again.' }));
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [id]: false }));
+    }
   };
 
   const handleGenerate = () => {
@@ -257,20 +291,29 @@ export default function InputPage() {
                 onChange={(e) => handleFieldChange(field.id, e.target.value)}
                 className="w-full h-32 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 placeholder={`Enter your ${field.label.toLowerCase()}...`}
+                disabled={loadingStates[field.id]}
               />
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <button
                   onClick={() => handleAutoFill(field.id)}
                   className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  disabled={loadingStates[field.id]}
                 >
                   Auto-Fill
                 </button>
                 <button
                   onClick={() => handleRewrite(field.id)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  disabled={loadingStates[field.id] || !field.value.trim()}
                 >
                   Rewrite for Survival
                 </button>
+                {loadingStates[field.id] && (
+                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                )}
+                {errorStates[field.id] && (
+                  <span className="text-sm text-red-600">{errorStates[field.id]}</span>
+                )}
               </div>
             </div>
           ))}

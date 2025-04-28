@@ -1,39 +1,46 @@
 import { NextResponse } from 'next/server';
+import { OpenAI } from 'openai';
+import { SURVIVAL_PROMPTS, SURVIVALIST_SYSTEM_PROMPT, Industry } from '../../../lib/survival-prompts';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { text, industry } = body;
+    const { text, industry } = await request.json();
 
-    // Validate required fields
-    if (!text || !industry) {
-      return NextResponse.json(
-        { error: 'Missing required fields: text and industry' },
-        { status: 400 }
-      );
+    if (!text || !industry || !['tech', 'service', 'healthcare'].includes(industry)) {
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    // Validate industry
-    const validIndustries = ['tech', 'service', 'healthcare'];
-    if (!validIndustries.includes(industry)) {
-      return NextResponse.json(
-        { error: 'Invalid industry. Must be one of: tech, service, healthcare' },
-        { status: 400 }
-      );
+    const prompt = SURVIVAL_PROMPTS[industry as Industry].replace('{text}', text);
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'system',
+          content: SURVIVALIST_SYSTEM_PROMPT,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.3, // lower = more focused, less rambling
+      max_tokens: 500, // shorter max length to prevent bloated output
+    });
+
+    const rewrittenText = completion.choices[0]?.message?.content?.trim();
+
+    if (!rewrittenText) {
+      throw new Error('No rewritten text returned');
     }
 
-    // TODO: Implement LLM call here
-    // For now, return a mock response
-    const mockResponse = {
-      rewrittenText: `[Survivalized version of: ${text}]`,
-    };
-
-    return NextResponse.json(mockResponse);
+    return NextResponse.json({ rewrittenText });
   } catch (error) {
-    console.error('Error in rewrite-for-survival:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Rewrite for Survival failed:', error);
+    return NextResponse.json({ error: 'Rewrite failed' }, { status: 502 });
   }
-} 
+}
