@@ -1,7 +1,9 @@
 'use client';
 
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { survivalPhrases, type PhraseCategory } from '../data/survival-phrases';
 
 interface ResumeField {
   id: string;
@@ -12,17 +14,12 @@ interface ResumeField {
 export default function InputPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const industry = searchParams.get('industry');
+  const industry = searchParams.get('industry') || 'tech'; // Default to tech for testing
 
   const [fields, setFields] = useState<ResumeField[]>([]);
   const [applicantNumber] = useState(() => Math.floor(1000 + Math.random() * 9000));
 
   useEffect(() => {
-    if (!industry) {
-      router.push('/');
-      return;
-    }
-
     // Set up fields based on industry
     const fieldLabels = {
       tech: ['Objective', 'Professional Experience', 'Technical Skills'],
@@ -37,7 +34,7 @@ export default function InputPage() {
         value: '',
       }))
     );
-  }, [industry, router]);
+  }, [industry]);
 
   const handleFieldChange = (id: string, value: string) => {
     setFields((prev) =>
@@ -46,8 +43,21 @@ export default function InputPage() {
   };
 
   const handleAutoFill = (id: string) => {
-    // TODO: Implement auto-fill functionality
-    console.log('Auto-fill clicked for:', id);
+    // Map field IDs to phrase categories
+    const phraseCategory = id.includes('objective') 
+      ? 'objective' 
+      : id.includes('experience') 
+        ? 'experience' 
+        : 'skills' as PhraseCategory;
+
+    // Get random phrase from appropriate category
+    const phrases = survivalPhrases[phraseCategory];
+    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+
+    // Update the field with the random phrase
+    setFields((prev) =>
+      prev.map((field) => (field.id === id ? { ...field, value: randomPhrase } : field))
+    );
   };
 
   const handleRewrite = (id: string) => {
@@ -59,8 +69,6 @@ export default function InputPage() {
     // TODO: Implement generate functionality
     router.push('/preview');
   };
-
-  if (!industry) return null;
 
   return (
     <main className="min-h-screen p-4">
