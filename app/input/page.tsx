@@ -4,12 +4,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { survivalPhrases, type PhraseCategory } from '../data/survival-phrases';
-
-interface ResumeField {
-  id: string;
-  label: string;
-  value: string;
-}
+import { generateApplicantHeader } from '@/lib/generateApplicantHeader';
+import { ResumeFieldType, type ResumeField } from '../types/resume';
 
 export default function InputPage() {
   const router = useRouter();
@@ -17,21 +13,37 @@ export default function InputPage() {
   const industry = searchParams.get('industry') || 'tech'; // Default to tech for testing
 
   const [fields, setFields] = useState<ResumeField[]>([]);
-  const [applicantNumber] = useState(() => Math.floor(1000 + Math.random() * 9000));
+  const [applicantInfo, setApplicantInfo] = useState<{ applicantNumber: string; city: string; email: string } | null>(null);
+
+  useEffect(() => {
+    setApplicantInfo(generateApplicantHeader());
+  }, []);
 
   useEffect(() => {
     // Set up fields based on industry
     const fieldLabels = {
-      tech: ['Objective', 'Professional Experience', 'Technical Skills'],
-      service: ['Objective', 'Work Experience', 'Skills'],
-      healthcare: ['Objective', 'Clinical Experience', 'Certifications'],
+      tech: [
+        { id: ResumeFieldType.OBJECTIVE, label: 'Objective' },
+        { id: ResumeFieldType.EXPERIENCE, label: 'Professional Experience' },
+        { id: ResumeFieldType.SKILLS, label: 'Technical Skills' }
+      ],
+      service: [
+        { id: ResumeFieldType.OBJECTIVE, label: 'Objective' },
+        { id: ResumeFieldType.EXPERIENCE, label: 'Work Experience' },
+        { id: ResumeFieldType.SKILLS, label: 'Skills' }
+      ],
+      healthcare: [
+        { id: ResumeFieldType.OBJECTIVE, label: 'Objective' },
+        { id: ResumeFieldType.EXPERIENCE, label: 'Clinical Experience' },
+        { id: ResumeFieldType.SKILLS, label: 'Certifications' }
+      ]
     };
 
     setFields(
-      fieldLabels[industry as keyof typeof fieldLabels].map((label) => ({
-        id: label.toLowerCase().replace(/\s+/g, '-'),
+      fieldLabels[industry as keyof typeof fieldLabels].map(({ id, label }) => ({
+        id,
         label,
-        value: '',
+        value: ''
       }))
     );
   }, [industry]);
@@ -66,8 +78,26 @@ export default function InputPage() {
   };
 
   const handleGenerate = () => {
-    // TODO: Implement generate functionality
-    router.push('/preview');
+    // Create URL parameters with field values and applicant info
+    const params = new URLSearchParams();
+    
+    // Add field values
+    fields.forEach(field => {
+      params.append(field.id, field.value);
+    });
+    
+    // Add applicant info
+    if (applicantInfo) {
+      params.append('applicantNumber', applicantInfo.applicantNumber);
+      params.append('city', applicantInfo.city);
+      params.append('email', applicantInfo.email);
+    }
+    
+    // Add industry
+    params.append('industry', industry);
+    
+    // Navigate to preview page with parameters
+    router.push(`/preview?${params.toString()}`);
   };
 
   return (
@@ -75,9 +105,11 @@ export default function InputPage() {
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Capitalism Survival Guide</h1>
-          <p className="mt-2 text-gray-600">
-            Applicant #{applicantNumber} | Austin, TX | applicant{applicantNumber}@survivaltactics.io
-          </p>
+          {applicantInfo && (
+            <p className="mt-2 text-gray-600">
+              {applicantInfo.applicantNumber} | {applicantInfo.city} | {applicantInfo.email}
+            </p>
+          )}
         </div>
 
         <div className="space-y-6">

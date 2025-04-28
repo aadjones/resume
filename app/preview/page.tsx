@@ -1,9 +1,24 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ResumeFieldType } from '../types/resume';
 
 export default function PreviewPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Get applicant info from URL parameters
+  const applicantNumber = searchParams.get('applicantNumber') || 'Applicant #0000';
+  const city = searchParams.get('city') || 'Unknown City';
+  const email = searchParams.get('email') || 'unknown@example.com';
+  
+  // Get industry from URL parameters
+  const industry = searchParams.get('industry') || 'tech';
+  
+  // Get field values from URL parameters
+  const objective = searchParams.get(ResumeFieldType.OBJECTIVE) || '';
+  const experience = searchParams.get(ResumeFieldType.EXPERIENCE) || '';
+  const skills = searchParams.get(ResumeFieldType.SKILLS) || '';
 
   const handleDownload = () => {
     // TODO: Implement PDF download functionality
@@ -20,35 +35,39 @@ export default function PreviewPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Capitalism Survival Guide</h1>
           <p className="mt-2 text-gray-600">
-            Applicant #4587 | Austin, TX | applicant4587@survivaltactics.io
+            {applicantNumber} | {city} | {email}
           </p>
         </div>
 
         <div className="bg-white p-8 rounded-lg shadow-sm space-y-6">
-          <section>
-            <h2 className="text-lg font-semibold mb-2">OBJECTIVE</h2>
-            <p className="text-gray-700">
-              To optimize visible impact velocity while adapting to volatile market conditions and maximizing apparent productivity in a shifting organizational landscape.
-            </p>
-          </section>
+          {objective && (
+            <section>
+              <h2 className="text-lg font-semibold mb-2">OBJECTIVE</h2>
+              <p className="text-gray-700">{objective}</p>
+            </section>
+          )}
 
-          <section>
-            <h2 className="text-lg font-semibold mb-2">PROFESSIONAL EXPERIENCE</h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>Spearheaded optics-driven pivot under deadline compression</li>
-              <li>Implemented strategic resource reallocation initiatives</li>
-              <li>Optimized stakeholder communication channels</li>
-            </ul>
-          </section>
+          {experience && (
+            <section>
+              <h2 className="text-lg font-semibold mb-2">
+                {industry === 'tech' ? 'PROFESSIONAL EXPERIENCE' : 
+                 industry === 'service' ? 'WORK EXPERIENCE' : 
+                 'CLINICAL EXPERIENCE'}
+              </h2>
+              <p className="text-gray-700">{experience}</p>
+            </section>
+          )}
 
-          <section>
-            <h2 className="text-lg font-semibold mb-2">TECHNICAL SKILLS</h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              <li>Deadline Necromancy</li>
-              <li>API Surface-Level Expansion</li>
-              <li>Stakeholder Pacification</li>
-            </ul>
-          </section>
+          {skills && (
+            <section>
+              <h2 className="text-lg font-semibold mb-2">
+                {industry === 'tech' ? 'TECHNICAL SKILLS' : 
+                 industry === 'service' ? 'SKILLS' : 
+                 'CERTIFICATIONS'}
+              </h2>
+              <p className="text-gray-700">{skills}</p>
+            </section>
+          )}
         </div>
 
         <div className="flex gap-4 justify-center">
