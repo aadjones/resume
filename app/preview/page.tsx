@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ResumeFieldType } from '../types/resume';
+import html2pdf from 'html2pdf.js';
 
 export default function PreviewPage() {
   const router = useRouter();
@@ -21,8 +22,18 @@ export default function PreviewPage() {
   const skills = searchParams.get(ResumeFieldType.SKILLS) || '';
 
   const handleDownload = () => {
-    // TODO: Implement PDF download functionality
-    console.log('Download clicked');
+    const element = document.getElementById('resume-content');
+    if (!element) return;
+
+    const opt = {
+      margin: 1,
+      filename: `survival_resume_${applicantNumber.replace('#', '').replace(/\s+/g, '_')}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
   };
 
   const handleBack = () => {
@@ -34,12 +45,15 @@ export default function PreviewPage() {
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Capitalism Survival Guide</h1>
-          <p className="mt-2 text-gray-600">
-            {applicantNumber} | {city} | {email}
-          </p>
         </div>
 
-        <div className="bg-white p-8 rounded-lg shadow-sm space-y-6">
+        <div id="resume-content" className="bg-white p-8 rounded-lg shadow-sm space-y-6">
+          <div className="text-center">
+            <p className="text-gray-600">
+              {applicantNumber} | {city} | {email}
+            </p>
+          </div>
+
           {objective && (
             <section>
               <h2 className="text-lg font-semibold mb-2">OBJECTIVE</h2>

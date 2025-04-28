@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ResumeFieldType } from '../../types/resume';
+import { ResumeFieldType } from '../app/types/resume';
 
 describe('Input Propagation', () => {
   it('correctly formats field data for preview', () => {
