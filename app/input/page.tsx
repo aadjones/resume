@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { survivalPhrases, type PhraseCategory } from '../data/survival-phrases';
 import { generateApplicantHeader } from '@/lib/generateApplicantHeader';
 import { ResumeFieldType, type ResumeField } from '../types/resume';
 
-export default function InputPage() {
+function InputPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const industry = searchParams.get('industry') || 'tech'; // Default to tech for testing
@@ -98,13 +98,30 @@ export default function InputPage() {
         ? 'experience' 
         : 'skills' as PhraseCategory;
 
-    // Get random phrase from appropriate category
+    // Get phrases based on category
     const phrases = survivalPhrases[phraseCategory];
-    const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+    let newValue: string;
 
-    // Update the field with the random phrase
+    if (phraseCategory === 'objective') {
+      // For objective, use just one phrase
+      newValue = phrases[Math.floor(Math.random() * phrases.length)];
+    } else {
+      // For experience and skills, use three unique phrases
+      const selectedPhrases = [...phrases];
+      const result: string[] = [];
+      
+      for (let i = 0; i < 3 && selectedPhrases.length > 0; i++) {
+        const randomIndex = Math.floor(Math.random() * selectedPhrases.length);
+        result.push(`- ${selectedPhrases[randomIndex]}`);
+        selectedPhrases.splice(randomIndex, 1);
+      }
+      
+      newValue = result.join('\n');
+    }
+
+    // Update the field with the phrases
     setFields((prev) =>
-      prev.map((field) => (field.id === id ? { ...field, value: randomPhrase } : field))
+      prev.map((field) => (field.id === id ? { ...field, value: newValue } : field))
     );
   };
 
@@ -124,12 +141,14 @@ export default function InputPage() {
         },
         body: JSON.stringify({
           text: field.value,
-          industry
+          industry,
+          section: id.toLowerCase() // Convert field ID to section name
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Rewrite failed');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Rewrite failed');
       }
 
       const data = await response.json();
@@ -139,7 +158,10 @@ export default function InputPage() {
         prev.map(f => (f.id === id ? { ...f, value: data.rewrittenText } : f))
       );
     } catch (error) {
-      setErrorStates(prev => ({ ...prev, [id]: 'Rewrite failed, please try again.' }));
+      setErrorStates(prev => ({ 
+        ...prev, 
+        [id]: error instanceof Error ? error.message : 'Rewrite failed, please try again.' 
+      }));
     } finally {
       setLoadingStates(prev => ({ ...prev, [id]: false }));
     }
@@ -195,137 +217,150 @@ export default function InputPage() {
 
   return (
     <main className="min-h-screen p-4">
-      <div className="max-w-2xl mx-auto space-y-8 relative">
-        <div className="text-center space-y-4">
-          <div className="flex flex-col">
-            <div className="flex justify-end mb-3">
-              <button
-                onClick={handleChangeIndustry}
-                className="text-sm text-blue-600 hover:underline"
-              >
-                ← Change Industry
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Display Name
-                </label>
-                <input
-                  type="text"
-                  id="displayName"
-                  value={applicantInfo.displayName}
-                  onChange={(e) => handleApplicantInfoChange('displayName', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter name"
-                />
-              </div>
-              <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                  City
-                </label>
-                <input
-                  type="text"
-                  id="city"
-                  value={applicantInfo.city}
-                  onChange={(e) => handleApplicantInfoChange('city', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter city"
-                />
-              </div>
-              <div className="md:col-span-1 lg:col-span-1">
-                <label htmlFor="emailUsername" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="emailUsername"
-                  value={applicantInfo.emailUsername}
-                  onChange={(e) => handleApplicantInfoChange('emailUsername', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
-                  placeholder="Enter email"
-                  style={{ minWidth: '100%' }}
-                />
-              </div>
-            </div>
-            <p className="text-gray-600 text-sm break-all">
-              {applicantInfo.displayName} | {applicantInfo.city} | {applicantInfo.emailUsername}
-            </p>
-          </div>
-        </div>
-
-        {showConfirmDialog && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-              <h3 className="text-lg font-medium mb-4">Change Industry?</h3>
-              <p className="text-gray-600 mb-6">
-                You have entered some information. Changing industries will reset all fields.
-              </p>
-              <div className="flex justify-end gap-4">
-                <button
-                  onClick={() => setShowConfirmDialog(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleConfirmChange}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-                >
-                  Change Industry
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="space-y-6">
-          {fields.map((field) => (
-            <div key={field.id} className="space-y-2">
-              <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
-                {field.label}
-              </label>
-              <textarea
-                id={field.id}
-                value={field.value}
-                onChange={(e) => handleFieldChange(field.id, e.target.value)}
-                className="w-full h-32 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                placeholder={`Enter your ${field.label.toLowerCase()}...`}
-                disabled={loadingStates[field.id]}
-              />
-              <div className="flex gap-2 items-center">
-                <button
-                  onClick={() => handleAutoFill(field.id)}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                  disabled={loadingStates[field.id]}
-                >
-                  Auto-Fill
-                </button>
-                <button
-                  onClick={() => handleRewrite(field.id)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50"
-                  disabled={loadingStates[field.id] || !field.value.trim()}
-                >
-                  Rewrite for Survival
-                </button>
-                {loadingStates[field.id] && (
-                  <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                )}
-                {errorStates[field.id] && (
-                  <span className="text-sm text-red-600">{errorStates[field.id]}</span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-
+      <div className="relative w-full max-w-[1200px] mx-auto">
         <button
-          onClick={handleGenerate}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          onClick={handleChangeIndustry}
+          className="fixed left-4 sm:left-8 md:left-12 lg:left-24 top-8 text-sm text-blue-600 hover:underline"
         >
-          Generate Survival Resume
+          ← Change Industry
         </button>
+        <div className="max-w-2xl mx-auto space-y-8">
+          <div className="text-center space-y-4">
+            <div className="flex flex-col">
+              <div className="mb-8">
+                <div className="text-center space-y-2">
+                  <h1 className="text-2xl font-bold">{applicantInfo.displayName || 'Applicant #XXXX'}</h1>
+                  <p className="text-sm text-gray-600">
+                    {applicantInfo.city || 'City'} | {applicantInfo.emailUsername || 'email@example.com'}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Display Name
+                  </label>
+                  <input
+                    type="text"
+                    id="displayName"
+                    value={applicantInfo.displayName}
+                    onChange={(e) => handleApplicantInfoChange('displayName', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    value={applicantInfo.city}
+                    onChange={(e) => handleApplicantInfoChange('city', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Enter city"
+                  />
+                </div>
+                <div className="md:col-span-1 lg:col-span-1">
+                  <label htmlFor="emailUsername" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="emailUsername"
+                    value={applicantInfo.emailUsername}
+                    onChange={(e) => handleApplicantInfoChange('emailUsername', e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    placeholder="Enter email"
+                    style={{ minWidth: '100%' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {showConfirmDialog && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+                <h3 className="text-lg font-medium mb-4">Change Industry?</h3>
+                <p className="text-gray-600 mb-6">
+                  You have entered some information. Changing industries will reset all fields.
+                </p>
+                <div className="flex justify-end gap-4">
+                  <button
+                    onClick={() => setShowConfirmDialog(false)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirmChange}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
+                  >
+                    Change Industry
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-6">
+            {fields.map((field) => (
+              <div key={field.id} className="space-y-2">
+                <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
+                  {field.label}
+                </label>
+                <textarea
+                  id={field.id}
+                  value={field.value}
+                  onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                  className="w-full h-32 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  placeholder={`Enter your ${field.label.toLowerCase()}...`}
+                  disabled={loadingStates[field.id]}
+                />
+                <div className="flex gap-2 items-center">
+                  <button
+                    onClick={() => handleAutoFill(field.id)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                    disabled={loadingStates[field.id]}
+                  >
+                    Auto-Fill
+                  </button>
+                  <button
+                    onClick={() => handleRewrite(field.id)}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50"
+                    disabled={loadingStates[field.id] || !field.value.trim()}
+                  >
+                    Rewrite for Survival
+                  </button>
+                  {loadingStates[field.id] && (
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  )}
+                  {errorStates[field.id] && (
+                    <span className="text-sm text-red-600">{errorStates[field.id]}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={handleGenerate}
+            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Generate Survival Resume
+          </button>
+        </div>
       </div>
     </main>
+  );
+}
+
+export default function InputPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <InputPageContent />
+    </Suspense>
   );
 } 

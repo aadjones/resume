@@ -16,4 +16,23 @@ export const survivalPhrases = {
   ],
 } as const;
 
-export type PhraseCategory = keyof typeof survivalPhrases; 
+export type PhraseCategory = keyof typeof survivalPhrases;
+
+export function getRandomPhrase(category: PhraseCategory): string {
+  const phrases = survivalPhrases[category];
+  const randomIndex = Math.floor(Math.random() * phrases.length);
+  return phrases[randomIndex];
+}
+
+export function getRandomPhrases(category: PhraseCategory, count: number): string[] {
+  const phrases = [...survivalPhrases[category]];
+  const result: string[] = [];
+  
+  for (let i = 0; i < count && phrases.length > 0; i++) {
+    const randomIndex = Math.floor(Math.random() * phrases.length);
+    result.push(phrases[randomIndex]);
+    phrases.splice(randomIndex, 1);
+  }
+  
+  return result;
+} 
