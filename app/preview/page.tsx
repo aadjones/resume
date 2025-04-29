@@ -7,7 +7,7 @@ import '@/styles/pdf.css';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import type { PDFDownloadButtonProps } from '@/app/preview/PDFDownloadButton';
-import { ThemeToggle } from '../components/ThemeToggle';
+import ThemeToggle from '../components/ThemeToggle';
 
 // Dynamically import the PDF generation component
 const PDFDownloadButton = dynamic<PDFDownloadButtonProps>(() => import('@/app/preview/PDFDownloadButton'), {
@@ -25,17 +25,17 @@ const PDFDownloadButton = dynamic<PDFDownloadButtonProps>(() => import('@/app/pr
 function PreviewPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const industry = searchParams.get('industry') || 'tech';
-  const applicantNumber = searchParams.get('applicantNumber') || '';
-  const city = searchParams.get('city') || '';
-  const email = searchParams.get('email') || '';
-  const objective = searchParams.get('objective') || '';
-  const experience = searchParams.get('experience') || '';
-  const skills = searchParams.get('skills') || '';
+  const industry = searchParams?.get('industry') || 'tech';
+  const applicantNumber = searchParams?.get('applicantNumber') || '';
+  const city = searchParams?.get('city') || '';
+  const email = searchParams?.get('email') || '';
+  const objective = searchParams?.get('objective') || '';
+  const experience = searchParams?.get('experience') || '';
+  const skills = searchParams?.get('skills') || '';
 
   const handleBack = () => {
     const params = new URLSearchParams();
-    searchParams.forEach((value, key) => {
+    searchParams?.forEach((value, key) => {
       params.append(key, value);
     });
     router.push(`/input?${params.toString()}`);

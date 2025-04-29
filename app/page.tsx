@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ThemeToggle } from './components/ThemeToggle';
+import ThemeToggle from './components/ThemeToggle';
 
 export default function Home() {
   const [selectedIndustry, setSelectedIndustry] = useState<string>('');

@@ -6,12 +6,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { survivalPhrases, type PhraseCategory } from '../data/survival-phrases';
 import { generateApplicantHeader } from '@/lib/generateApplicantHeader';
 import { ResumeFieldType, type ResumeField } from '../types/resume';
-import { ThemeToggle } from '../components/ThemeToggle';
+import ThemeToggle from '../components/ThemeToggle';
 
 function InputPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const industry = searchParams.get('industry') || 'tech'; // Default to tech for testing
+  const industry = searchParams?.get('industry') || 'tech'; // Default to tech for testing
 
   const [fields, setFields] = useState<ResumeField[]>([]);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
@@ -31,9 +31,9 @@ function InputPageContent() {
 
   useEffect(() => {
     // Check if we have values in URL parameters
-    const applicantNumber = searchParams.get('applicantNumber');
-    const city = searchParams.get('city');
-    const email = searchParams.get('email');
+    const applicantNumber = searchParams?.get('applicantNumber');
+    const city = searchParams?.get('city');
+    const email = searchParams?.get('email');
 
     if (applicantNumber || city || email) {
       // If we have URL parameters, use those values
@@ -80,7 +80,7 @@ function InputPageContent() {
       fieldLabels[industry as keyof typeof fieldLabels].map(({ id, label }) => ({
         id,
         label,
-        value: searchParams.get(id) || ''
+        value: searchParams?.get(id) || ''
       }))
     );
   }, [industry, searchParams]);  // Add searchParams to dependency array

@@ -1,87 +1,33 @@
 'use client';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
-
-type Identity = {
-  name: string;
-  city: string;
-  email: string;
-};
-
-type Content = {
-  objective: string;
-  experience: string;
-  skills: string;
-};
+type Industry = 'tech' | 'service' | 'healthcare';
 
 type WizardState = {
-  industry: string;
-  identity: Identity;
-  content: Content;
+  industry: Industry;
+  setIndustry: (i: Industry) => void;
+  identity: { name: string; city: string; email: string };
+  setIdentity: (id: { name: string; city: string; email: string }) => void;
+  content: { objective: string; experience: string; skills: string };
+  setContent: (c: WizardState['content']) => void;
 };
 
-type WizardContextType = {
-  state: WizardState;
-  setIndustry: (industry: string) => void;
-  setIdentity: (identity: Partial<Identity>) => void;
-  setContent: (content: Partial<Content>) => void;
-};
-
-const initialState: WizardState = {
-  industry: '',
-  identity: {
-    name: '',
-    city: '',
-    email: '',
-  },
-  content: {
-    objective: '',
-    experience: '',
-    skills: '',
-  },
-};
-
-const WizardContext = createContext<WizardContextType | undefined>(undefined);
+const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export function WizardProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<WizardState>(initialState);
-
-  const setIndustry = (industry: string) => {
-    setState((prev) => ({ ...prev, industry }));
-  };
-
-  const setIdentity = (identity: Partial<Identity>) => {
-    setState((prev) => ({
-      ...prev,
-      identity: { ...prev.identity, ...identity },
-    }));
-  };
-
-  const setContent = (content: Partial<Content>) => {
-    setState((prev) => ({
-      ...prev,
-      content: { ...prev.content, ...content },
-    }));
-  };
+  const [industry, setIndustry] = useState<Industry>('tech');
+  const [identity, setIdentity] = useState({ name: '', city: '', email: '' });
+  const [content, setContent] = useState({ objective: '', experience: '', skills: '' });
 
   return (
-    <WizardContext.Provider
-      value={{
-        state,
-        setIndustry,
-        setIdentity,
-        setContent,
-      }}
-    >
+    <WizardContext.Provider value={{ industry, setIndustry, identity, setIdentity, content, setContent }}>
       {children}
     </WizardContext.Provider>
   );
 }
 
 export function useWizard() {
-  const context = useContext(WizardContext);
-  if (context === undefined) {
-    throw new Error('useWizard must be used within a WizardProvider');
-  }
-  return context;
+  const ctx = useContext(WizardContext);
+  if (!ctx) throw new Error('useWizard must be inside WizardProvider');
+  return ctx;
 } 
