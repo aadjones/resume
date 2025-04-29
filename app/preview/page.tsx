@@ -71,9 +71,13 @@ function PreviewPageContent() {
                  industry === 'service' ? 'WORK EXPERIENCE' : 
                  'CLINICAL EXPERIENCE'}
               </h2>
-              <div className="prose dark:prose-invert">
-                <ReactMarkdown>{experience}</ReactMarkdown>
-              </div>
+              <ul className="list-disc list-inside space-y-1 text-gray-900 dark:text-white">
+                {experience.split('\n')
+                  .filter(line => line.trim())
+                  .map((line, index) => (
+                    <li key={index}>{line.replace(/^-\s*/, '')}</li>
+                  ))}
+              </ul>
             </section>
           )}
 
@@ -84,9 +88,13 @@ function PreviewPageContent() {
                  industry === 'service' ? 'SKILLS' : 
                  'CLINICAL SKILLS'}
               </h2>
-              <div className="prose dark:prose-invert">
-                <ReactMarkdown>{skills}</ReactMarkdown>
-              </div>
+              <ul className="list-disc list-inside space-y-1 text-gray-900 dark:text-white">
+                {skills.split('\n')
+                  .filter(line => line.trim())
+                  .map((line, index) => (
+                    <li key={index}>{line.replace(/^-\s*/, '')}</li>
+                  ))}
+              </ul>
             </section>
           )}
         </div>

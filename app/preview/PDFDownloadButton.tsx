@@ -56,11 +56,11 @@ const PDFDownloadButton = ({
               industry === 'service' ? 'WORK EXPERIENCE' : 
               'CLINICAL EXPERIENCE'}
           </div>
-          <div style="padding-left: 1em; color: #111827;">
+          <div style="color: #111827;">
             ${experience.split('\n')
               .map(line => line.trim())
               .filter(line => line)
-              .map(line => `<div style="margin: 0.4em 0; text-indent: -0.5em; padding-left: 0.5em; line-height: 1.4; color: #111827;">• ${line.replace(/^-\s*/, '')}</div>`)
+              .map(line => `<div style="margin: 0.4em 0; display: flex; line-height: 1.4; color: #111827;"><span style="width: 1em;">•</span>${line.replace(/^-\s*/, '')}</div>`)
               .join('')}
           </div>
         </div>
@@ -71,11 +71,11 @@ const PDFDownloadButton = ({
               industry === 'service' ? 'SKILLS' : 
               'CLINICAL SKILLS'}
           </div>
-          <div style="padding-left: 1em; color: #111827;">
+          <div style="color: #111827;">
             ${skills.split('\n')
               .map(line => line.trim())
               .filter(line => line)
-              .map(line => `<div style="margin: 0.4em 0; text-indent: -0.5em; padding-left: 0.5em; line-height: 1.4; color: #111827;">• ${line.replace(/^-\s*/, '')}</div>`)
+              .map(line => `<div style="margin: 0.4em 0; display: flex; line-height: 1.4; color: #111827;"><span style="width: 1em;">•</span>${line.replace(/^-\s*/, '')}</div>`)
               .join('')}
           </div>
         </div>
