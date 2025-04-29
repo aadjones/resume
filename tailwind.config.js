@@ -7,7 +7,14 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
+    fontFamily: {
+      heading: ['var(--font-merriweather)', 'serif'],
+      body: ['var(--font-inter)', 'sans-serif'],
+    },
     extend: {
+      colors: {
+        accent: '#1f63e4',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

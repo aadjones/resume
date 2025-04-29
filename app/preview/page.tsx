@@ -42,63 +42,68 @@ function PreviewPageContent() {
   };
 
   return (
-    <main className="min-h-screen p-4">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <main className="min-h-screen p-4 bg-white dark:bg-gray-900">
+      <div className="max-w-[8.5in] mx-auto space-y-8">
         <div className="flex justify-end mb-4">
           <ThemeToggle />
         </div>
-        <div id="resume-content" className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm space-y-6">
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{applicantNumber}</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {city} | {email}
-            </p>
-          </div>
+        
+        {/* Resume Content */}
+        <div id="resume-content" className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm space-y-6 font-serif">
+          {/* Header */}
+          <header className="border-b pb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{applicantNumber}</h1>
+            <div className="text-gray-600 dark:text-gray-300">
+              <span>{email}</span>
+              <span className="mx-2">|</span>
+              <span>{city}</span>
+              <span className="mx-2">|</span>
+              <a href="#" className="text-blue-600 hover:text-blue-700">Portfolio/GitHub link</a>
+            </div>
+          </header>
 
-          {objective && (
-            <section>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">OBJECTIVE</h2>
-              <div className="prose dark:prose-invert">
-                <ReactMarkdown>{objective}</ReactMarkdown>
-              </div>
-            </section>
-          )}
-
-          {experience && (
-            <section>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                {industry === 'tech' ? 'PROFESSIONAL EXPERIENCE' : 
-                 industry === 'service' ? 'WORK EXPERIENCE' : 
-                 'CLINICAL EXPERIENCE'}
-              </h2>
-              <ul className="list-disc list-inside space-y-1 text-gray-900 dark:text-white">
+          {/* Work Experience */}
+          <section>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase border-b pb-1 mb-4">
+              WORK EXPERIENCE
+            </h2>
+            {experience && (
+              <div className="space-y-4">
                 {experience.split('\n')
                   .filter(line => line.trim())
                   .map((line, index) => (
-                    <li key={index}>{line.replace(/^-\s*/, '')}</li>
+                    <div key={index} className="flex items-start">
+                      <span className="mr-2 text-gray-600">•</span>
+                      <span className="text-gray-900 dark:text-white">{line.replace(/^-\s*/, '')}</span>
+                    </div>
                   ))}
-              </ul>
-            </section>
-          )}
+              </div>
+            )}
+          </section>
 
-          {skills && (
-            <section>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                {industry === 'tech' ? 'TECHNICAL SKILLS' : 
-                 industry === 'service' ? 'SKILLS' : 
-                 'CLINICAL SKILLS'}
-              </h2>
-              <ul className="list-disc list-inside space-y-1 text-gray-900 dark:text-white">
+          {/* Skills & Certifications */}
+          <section>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase border-b pb-1 mb-4">
+              {industry === 'tech' ? 'TECHNICAL SKILLS' : 
+               industry === 'service' ? 'SKILLS' : 
+               'CERTIFICATIONS & SKILLS'}
+            </h2>
+            {skills && (
+              <div className="space-y-2">
                 {skills.split('\n')
                   .filter(line => line.trim())
                   .map((line, index) => (
-                    <li key={index}>{line.replace(/^-\s*/, '')}</li>
+                    <div key={index} className="flex items-start">
+                      <span className="mr-2 text-gray-600">•</span>
+                      <span className="text-gray-900 dark:text-white">{line.replace(/^-\s*/, '')}</span>
+                    </div>
                   ))}
-              </ul>
-            </section>
-          )}
+              </div>
+            )}
+          </section>
         </div>
 
+        {/* Action Buttons */}
         <div className="flex gap-4 justify-center">
           <PDFDownloadButton
             applicantNumber={applicantNumber}

@@ -12,16 +12,15 @@ Format your output using Markdown:
 
   experience: `
 Format your output using Markdown:
-- Use \`-\` for bullet points
-- Each bullet must be on its own line
+- Each point must be on its own line
 - No extra paragraphs
 - Expose systemic survival actions clearly
 `,
 
   skills: `
 Format your output using Markdown:
-- Use \`-\` for bullet points
-- Each bullet should be a terse tactical phrase
+- Each skill should be a terse tactical phrase
+- One per line
 - No full sentences
 - Highlight late capitalist operational proficiencies
 `
@@ -34,17 +33,17 @@ Navigate directive volatility and organizational opacity in a tech environment, 
 `,
 
     experience: `
-- Directed cross-functional deliverables under unstable timelines to maintain outward compliance with shifting priorities.
-- Preserved product development optics through tactical deflection of systemic resourcing failures.
-- Mitigated leadership risk exposure by absorbing shifting scope expansions without escalating visible project volatility.
+Directed cross-functional deliverables under unstable timelines to maintain outward compliance with shifting priorities.
+Preserved product development optics through tactical deflection of systemic resourcing failures.
+Mitigated leadership risk exposure by absorbing shifting scope expansions without escalating visible project volatility.
 `,
 
     skills: `
-- Deliverable Optics Management
-- Tactical Scope Absorption
-- KPI Surface Manipulation
-- Cross-Functional Volatility Navigation
-- Resource Deprivation Compensation
+Deliverable Optics Management
+Tactical Scope Absorption
+KPI Surface Manipulation
+Cross-Functional Volatility Navigation
+Resource Deprivation Compensation
 `
   },
 
@@ -54,17 +53,17 @@ Maintain emotional regulation and customer-facing operational optics in service 
 `,
 
     experience: `
-- Absorbed interpersonal volatility to preserve service optics under chronic understaffing conditions.
-- De-escalated customer dissatisfaction without formal escalation pathways or institutional support.
-- Sustained public-facing performance standards while absorbing unmanaged systemic failures.
+Absorbed interpersonal volatility to preserve service optics under chronic understaffing conditions.
+De-escalated customer dissatisfaction without formal escalation pathways or institutional support.
+Sustained public-facing performance standards while absorbing unmanaged systemic failures.
 `,
 
     skills: `
-- Conflict Diffusion Under Observation
-- Emotional Labor Load-Bearing
-- Service Optics Preservation
-- Passive Operational Stabilization
-- Silent Resource Deficiency Compensation
+Conflict Diffusion Under Observation
+Emotional Labor Load-Bearing
+Service Optics Preservation
+Passive Operational Stabilization
+Silent Resource Deficiency Compensation
 `
   },
 
@@ -74,17 +73,17 @@ Sustain clinical deliverable operations under institutional scarcity, bureaucrat
 `,
 
     experience: `
-- Maintained care delivery consistency amid chronic resourcing gaps and bureaucratic navigation demands.
-- Absorbed administrative instability and procedural flux without compromising patient-visible operational optics.
-- Executed silent endurance of compassion fatigue to preserve institutional compliance appearance.
+Maintained care delivery consistency amid chronic resourcing gaps and bureaucratic navigation demands.
+Absorbed administrative instability and procedural flux without compromising patient-visible operational optics.
+Executed silent endurance of compassion fatigue to preserve institutional compliance appearance.
 `,
 
     skills: `
-- Bureaucratic Navigation Fluency
-- Compassion Fatigue Modulation
-- Operational Continuity Under Resource Scarcity
-- Patient Optics Management
-- Procedural Adaptation Under Instability
+Bureaucratic Navigation Fluency
+Compassion Fatigue Modulation
+Operational Continuity Under Resource Scarcity
+Patient Optics Management
+Procedural Adaptation Under Instability
 `
   }
 };
@@ -185,5 +184,5 @@ Formatting Rules:
 - Never simulate an input/output structure.
 - Only produce the final survivalist text in the expected field format (Objective, Experience, or Skills).
 - Compress all outputs into brutal, tactical, single-idea units.
-- If a section requires bullets, use Markdown \`-\` bullets, no other prefixing.
-- Never elaborate beyond a single tactical action per bullet.`;
+- For experience and skills, write one item per line without bullets or prefixes.
+- Never elaborate beyond a single tactical action per item.`;

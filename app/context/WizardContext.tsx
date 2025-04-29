@@ -16,7 +16,11 @@ const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export function WizardProvider({ children }: { children: ReactNode }) {
   const [industry, setIndustry] = useState<Industry>('tech');
-  const [identity, setIdentity] = useState({ name: '', city: '', email: '' });
+  const [identity, setIdentity] = useState({ 
+    name: 'Your Name', 
+    city: 'Your City', 
+    email: 'your.email@example.com' 
+  });
   const [content, setContent] = useState({ objective: '', experience: '', skills: '' });
 
   return (

@@ -7,12 +7,19 @@ import { survivalPhrases, type PhraseCategory } from '../../data/survival-phrase
 
 type Section = 'objective' | 'experience' | 'skills';
 
-export default function ContentStep() {
-  const { content, setContent, industry } = useWizard();
+export default function ProfileStep() {
+  const { identity, setIdentity, content, setContent, industry } = useWizard();
   const [isLoading, setIsLoading] = useState<Section | null>(null);
   const router = useRouter();
 
-  const handleChange = (field: Section, value: string) => {
+  const handleIdentityChange = (field: 'name' | 'city' | 'email', value: string) => {
+    setIdentity({
+      ...identity,
+      [field]: value
+    });
+  };
+
+  const handleContentChange = (field: Section, value: string) => {
     setContent({
       ...content,
       [field]: value
@@ -34,7 +41,7 @@ export default function ContentStep() {
       
       for (let i = 0; i < 3 && selectedPhrases.length > 0; i++) {
         const randomIndex = Math.floor(Math.random() * selectedPhrases.length);
-        result.push(`- ${selectedPhrases[randomIndex]}`);
+        result.push(selectedPhrases[randomIndex]);
         selectedPhrases.splice(randomIndex, 1);
       }
       
@@ -106,7 +113,7 @@ export default function ContentStep() {
       <textarea
         id={section}
         value={content[section]}
-        onChange={(e) => handleChange(section, e.target.value)}
+        onChange={(e) => handleContentChange(section, e.target.value)}
         className="w-full h-32 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         placeholder={`Enter your ${label.toLowerCase()}`}
       />
@@ -138,14 +145,67 @@ export default function ContentStep() {
     <div className="flex gap-8 max-w-6xl mx-auto py-8">
       {/* LEFT: form */}
       <div className="w-1/2 space-y-6">
-        <h1 className="text-2xl font-bold mb-6 dark:text-white">Your Content</h1>
-        {renderTextarea('objective', 'Objective')}
-        {renderTextarea('experience', industry === 'tech' ? 'Professional Experience' : 
-                                    industry === 'service' ? 'Work Experience' : 
-                                    'Clinical Experience')}
-        {renderTextarea('skills', industry === 'tech' ? 'Technical Skills' : 
-                                 industry === 'service' ? 'Skills' : 
-                                 'Clinical Skills')}
+        <h1 className="text-2xl font-bold mb-6 dark:text-white">Your Profile</h1>
+        
+        {/* Identity Section */}
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Display Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={identity.name}
+                onChange={(e) => handleIdentityChange('name', e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="city" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  City
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  value={identity.city}
+                  onChange={(e) => handleIdentityChange('city', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  placeholder="Enter your city"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={identity.email}
+                  onChange={(e) => handleIdentityChange('email', e.target.value)}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="space-y-6">
+          {renderTextarea('objective', 'Objective')}
+          {renderTextarea('experience', industry === 'tech' ? 'Professional Experience' : 
+                                      industry === 'service' ? 'Work Experience' : 
+                                      'Clinical Experience')}
+          {renderTextarea('skills', industry === 'tech' ? 'Technical Skills' : 
+                                   industry === 'service' ? 'Skills' : 
+                                   'Clinical Skills')}
+        </div>
 
         <button
           onClick={() => router.push('/wizard/review')}
@@ -163,7 +223,15 @@ export default function ContentStep() {
       {/* RIGHT: live preview */}
       <div className="w-1/2 border p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
         <h2 className="text-xl font-semibold mb-4 dark:text-white">Preview</h2>
-        <h3 className="font-bold dark:text-white">Objective</h3>
+        <div className="text-center border-b border-gray-200 dark:border-gray-700 pb-6">
+          <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{identity.name || 'Your Name'}</h3>
+          <div className="mt-2 text-gray-600 dark:text-gray-300">
+            <span>{identity.city || 'Your City'}</span>
+            <span className="mx-2">•</span>
+            <span>{identity.email || 'your.email@example.com'}</span>
+          </div>
+        </div>
+        <h3 className="font-bold dark:text-white mt-6">Objective</h3>
         <p className="mb-4 dark:text-gray-300">{content.objective}</p>
         <h3 className="font-bold dark:text-white">Experience</h3>
         <ul className="list-disc list-inside mb-4 dark:text-gray-300">

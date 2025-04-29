@@ -34,7 +34,7 @@ export default function IndustryStep() {
       
       {industry && (
         <button
-          onClick={() => router.push('/wizard/identity')}
+          onClick={() => router.push('/wizard/profile')}
           className="w-full mt-6 px-4 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors"
         >
           Continue →

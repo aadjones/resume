@@ -1,6 +1,5 @@
 'use client';
 
-import { convertMarkdownToHtmlForPdf } from '@/lib/format-utils';
 import html2pdf from 'html2pdf.js';
 
 export interface PDFDownloadButtonProps {
@@ -23,59 +22,64 @@ const PDFDownloadButton = ({
   industry
 }: PDFDownloadButtonProps) => {
   const handleDownload = async () => {
-    // Format experience and skills as bullet points if they aren't already
-    const formatAsBullets = (text: string) => {
-      return text.split('\n')
-        .map(line => line.trim())
-        .filter(line => line)
-        .map(line => line.startsWith('- ') ? line : `- ${line}`)
-        .join('\n');
-    };
-
-    // Create a temporary div with light mode styles
+    // Create a temporary div with professional styling
     const tempDiv = document.createElement('div');
-    tempDiv.style.color = '#111827'; // text-gray-900
-    tempDiv.style.backgroundColor = '#ffffff'; // bg-white
+    tempDiv.style.fontFamily = 'Georgia, serif';
+    tempDiv.style.fontSize = '12pt';
+    tempDiv.style.lineHeight = '1.4';
+    tempDiv.style.color = '#111827';
+    tempDiv.style.backgroundColor = '#ffffff';
+    tempDiv.style.padding = '0.75in';
+    tempDiv.style.maxWidth = '8.5in';
+    tempDiv.style.margin = '0 auto';
     
-    // Create custom HTML structure with explicit light mode styles
+    // Create custom HTML structure with explicit styling
     const htmlContent = `
-      <div style="font-family: Arial, sans-serif; font-size: 12pt; line-height: 1.2; padding: 0.5in; background-color: white; color: #111827;">
-        <div style="text-align: center; margin-bottom: 1.5em;">
-          <div style="font-size: 24pt; font-weight: bold; color: #111827; margin-bottom: 0.5em;">${applicantNumber}</div>
-          <div style="font-size: 12pt; color: #4B5563;">${city} | ${email}</div>
-        </div>
-
-        <div style="margin: 1em 0;">
-          <div style="font-size: 14pt; font-weight: bold; color: #111827; margin-bottom: 0.3em;">OBJECTIVE</div>
-          <div style="color: #111827; margin-bottom: 0.3em;">${objective}</div>
-        </div>
-
-        <div style="margin: 1em 0;">
-          <div style="font-size: 14pt; font-weight: bold; color: #111827; margin-bottom: 0.3em;">
-            ${industry === 'tech' ? 'PROFESSIONAL EXPERIENCE' : 
-              industry === 'service' ? 'WORK EXPERIENCE' : 
-              'CLINICAL EXPERIENCE'}
+      <div style="font-family: Georgia, serif; color: #111827;">
+        <!-- Header -->
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5em; margin-bottom: 1.5em;">
+          <h1 style="font-size: 24pt; font-weight: bold; margin: 0 0 0.5em 0;">${applicantNumber}</h1>
+          <div style="color: #4B5563; font-size: 11pt;">
+            ${email} | ${city} | <a href="#" style="color: #2563eb; text-decoration: none;">Portfolio/GitHub link</a>
           </div>
-          <div style="color: #111827;">
+        </div>
+
+        <!-- Work Experience -->
+        <div style="margin: 1.5em 0;">
+          <h2 style="font-size: 14pt; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; margin: 0 0 1em 0;">
+            WORK EXPERIENCE
+          </h2>
+          <div style="margin: 1em 0;">
             ${experience.split('\n')
               .map(line => line.trim())
               .filter(line => line)
-              .map(line => `<div style="margin: 0.4em 0; display: flex; line-height: 1.4; color: #111827;"><span style="width: 1em;">•</span>${line.replace(/^-\s*/, '')}</div>`)
+              .map(line => `
+                <div style="display: flex; margin: 0.5em 0;">
+                  <span style="margin-right: 0.5em; color: #4B5563;">•</span>
+                  <span>${line.replace(/^-\s*/, '')}</span>
+                </div>
+              `)
               .join('')}
           </div>
         </div>
 
-        <div style="margin: 1em 0;">
-          <div style="font-size: 14pt; font-weight: bold; color: #111827; margin-bottom: 0.3em;">
+        <!-- Skills -->
+        <div style="margin: 1.5em 0;">
+          <h2 style="font-size: 14pt; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; margin: 0 0 1em 0;">
             ${industry === 'tech' ? 'TECHNICAL SKILLS' : 
               industry === 'service' ? 'SKILLS' : 
-              'CLINICAL SKILLS'}
-          </div>
-          <div style="color: #111827;">
+              'CERTIFICATIONS & SKILLS'}
+          </h2>
+          <div style="margin: 1em 0;">
             ${skills.split('\n')
               .map(line => line.trim())
               .filter(line => line)
-              .map(line => `<div style="margin: 0.4em 0; display: flex; line-height: 1.4; color: #111827;"><span style="width: 1em;">•</span>${line.replace(/^-\s*/, '')}</div>`)
+              .map(line => `
+                <div style="display: flex; margin: 0.5em 0;">
+                  <span style="margin-right: 0.5em; color: #4B5563;">•</span>
+                  <span>${line.replace(/^-\s*/, '')}</span>
+                </div>
+              `)
               .join('')}
           </div>
         </div>
@@ -86,12 +90,12 @@ const PDFDownloadButton = ({
 
     // Configure PDF options
     const opt = {
-      margin: 0,  // We're handling margins in the HTML
+      margin: 0,
       filename: `survival_resume_${applicantNumber.replace('#', '').replace(/\s+/g, '_')}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 2,
-        backgroundColor: '#ffffff' // Force white background
+        backgroundColor: '#ffffff'
       },
       jsPDF: { 
         unit: 'in', 
