@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { survivalPhrases, type PhraseCategory } from '../data/survival-phrases';
 import { generateApplicantHeader } from '@/lib/generateApplicantHeader';
 import { ResumeFieldType, type ResumeField } from '../types/resume';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 function InputPageContent() {
   const router = useRouter();
@@ -218,7 +219,7 @@ function InputPageContent() {
   return (
     <main className="min-h-screen p-4 sm:p-6">
       <div className="relative w-full max-w-[1200px] mx-auto">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-6 sm:mb-8 flex justify-between items-center">
           <button
             onClick={handleChangeIndustry}
             className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 hover:underline"
@@ -228,6 +229,7 @@ function InputPageContent() {
             </svg>
             Change Industry
           </button>
+          <ThemeToggle />
         </div>
         <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
           <div className="text-center space-y-4">

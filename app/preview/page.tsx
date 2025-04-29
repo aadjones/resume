@@ -7,6 +7,7 @@ import '@/styles/pdf.css';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import type { PDFDownloadButtonProps } from '@/app/preview/PDFDownloadButton';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 // Dynamically import the PDF generation component
 const PDFDownloadButton = dynamic<PDFDownloadButtonProps>(() => import('@/app/preview/PDFDownloadButton'), {
@@ -43,18 +44,21 @@ function PreviewPageContent() {
   return (
     <main className="min-h-screen p-4">
       <div className="max-w-2xl mx-auto space-y-8">
-        <div id="resume-content" className="bg-white p-8 rounded-lg shadow-sm space-y-6">
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
+        <div id="resume-content" className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm space-y-6">
           <div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold">{applicantNumber}</h1>
-            <p className="text-sm text-gray-600">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{applicantNumber}</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               {city} | {email}
             </p>
           </div>
 
           {objective && (
             <section>
-              <h2 className="text-lg font-semibold mb-2">OBJECTIVE</h2>
-              <div className="prose">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">OBJECTIVE</h2>
+              <div className="prose dark:prose-invert">
                 <ReactMarkdown>{objective}</ReactMarkdown>
               </div>
             </section>
@@ -62,12 +66,12 @@ function PreviewPageContent() {
 
           {experience && (
             <section>
-              <h2 className="text-lg font-semibold mb-2">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                 {industry === 'tech' ? 'PROFESSIONAL EXPERIENCE' : 
                  industry === 'service' ? 'WORK EXPERIENCE' : 
                  'CLINICAL EXPERIENCE'}
               </h2>
-              <div className="prose">
+              <div className="prose dark:prose-invert">
                 <ReactMarkdown>{experience}</ReactMarkdown>
               </div>
             </section>
@@ -75,12 +79,12 @@ function PreviewPageContent() {
 
           {skills && (
             <section>
-              <h2 className="text-lg font-semibold mb-2">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                 {industry === 'tech' ? 'TECHNICAL SKILLS' : 
                  industry === 'service' ? 'SKILLS' : 
                  'CLINICAL SKILLS'}
               </h2>
-              <div className="prose">
+              <div className="prose dark:prose-invert">
                 <ReactMarkdown>{skills}</ReactMarkdown>
               </div>
             </section>
@@ -99,7 +103,7 @@ function PreviewPageContent() {
           />
           <button
             onClick={handleBack}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
           >
             Back to Editing
           </button>
