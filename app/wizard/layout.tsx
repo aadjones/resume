@@ -3,6 +3,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { WizardProvider } from '../context/WizardContext';
 
 const steps = ['industry', 'identity', 'content', 'review'] as const;
 type Step = typeof steps[number];
@@ -32,34 +33,36 @@ export default function WizardLayout({
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 p-8">
-        {children}
-      </main>
-      <footer className="border-t p-4 flex justify-between">
-        <button
-          onClick={handleBack}
-          className={`px-4 py-2 rounded ${
-            isFirstStep
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800'
-          }`}
-          disabled={isFirstStep}
-        >
-          ← Back
-        </button>
-        <button
-          onClick={handleNext}
-          className={`px-4 py-2 rounded ${
-            isLastStep
-              ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800'
-          }`}
-          disabled={isLastStep}
-        >
-          Next →
-        </button>
-      </footer>
-    </div>
+    <WizardProvider>
+      <div className="min-h-screen flex flex-col">
+        <main className="flex-1 p-8">
+          {children}
+        </main>
+        <footer className="border-t p-4 flex justify-between">
+          <button
+            onClick={handleBack}
+            className={`px-4 py-2 rounded ${
+              isFirstStep
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+            disabled={isFirstStep}
+          >
+            ← Back
+          </button>
+          <button
+            onClick={handleNext}
+            className={`px-4 py-2 rounded ${
+              isLastStep
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+            disabled={isLastStep}
+          >
+            Next →
+          </button>
+        </footer>
+      </div>
+    </WizardProvider>
   );
 } 
