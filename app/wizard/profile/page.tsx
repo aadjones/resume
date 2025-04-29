@@ -3,7 +3,8 @@
 import { useWizard } from '../../context/WizardContext';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { survivalPhrases, type PhraseCategory } from '../../data/survival-phrases';
+import { survivalPhrases } from '../../data/survival-phrases';
+import type { Industry } from '../../data/survival-phrases';
 
 type Section = 'objective' | 'experience' | 'skills';
 
@@ -27,8 +28,8 @@ export default function ProfileStep() {
   };
 
   const handleAutoFill = (section: Section) => {
-    // Get phrases based on category
-    const phrases = survivalPhrases[section as PhraseCategory];
+    // Get phrases based on category and industry
+    const phrases = survivalPhrases[industry][section];
     let newValue: string;
 
     if (section === 'objective') {
