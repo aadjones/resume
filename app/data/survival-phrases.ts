@@ -132,6 +132,26 @@ export const survivalPhrases: Industries = {
       "Executed strategic customer appeasement protocols under extreme resource deprivation.",
     ],
     skills: [
+      "Marriott International Operations",
+      "Hilton Worldwide Management",
+      "Starbucks Customer Experience",
+      "Darden Restaurant Systems",
+      "DoorDash Delivery Optimization",
+      "Uber Eats Platform Management",
+      "FedEx Logistics Operations",
+      "UPS Supply Chain Management",
+      "DHL International Shipping",
+      "Accenture Consulting Services",
+      "Deloitte Professional Services",
+      "ADP HR Solutions",
+      "ManpowerGroup Staffing",
+      "Great Clips Salon Operations",
+      "Massage Envy Spa Services",
+      "Anytime Fitness Management",
+      "ServPro Disaster Recovery",
+      "Merry Maids Cleaning Services",
+      "Jani-King Commercial Cleaning",
+      "ABM Facility Management",
       "Advanced Conflict Suppression",
       "Emotional Labor Optimization",
       "Customer Satisfaction Metric Engineering",
@@ -139,27 +159,7 @@ export const survivalPhrases: Industries = {
       "Strategic Understaffing Navigation",
       "Uncompensated Responsibility Acceptance",
       "Peak-Volume Survival Tactics",
-      "Multi-Role Coverage Operations",
-      "Perpetual Availability Maintenance",
-      "Resource Deficit Compensation",
-      "Smile Endurance Engineering",
-      "Customer Abuse Absorption Protocols",
-      "Break Avoidance Mastery",
-      "Infinite Patience Simulation",
-      "Policy Violation Absorption",
-      "Management Absence Navigation",
-      "Crisis Mode Perpetuation",
-      "Emotional Boundary Dissolution",
-      "Schedule Flexibility Extremes",
-      "Holiday Coverage Acceptance",
-      "Last-Minute Shift Absorption",
-      "Customer Hostility Deflection",
-      "Multi-Location Coverage Art",
-      "Zero-Break Shift Endurance",
-      "Perpetual Standing Tolerance",
-      "Meal Skip Optimization",
-      "Complaint Deflection Mastery",
-      "Understaffing Compensation",
+      "Multi-Role Coverage Operations"
     ]
   },
   healthcare: {
@@ -251,4 +251,180 @@ export function getRandomPhrases(industry: Industry, category: PhraseCategory, c
   }
   
   return result;
-} 
+}
+
+export const companyNames = {
+  tech: [
+    "Google",
+    "Microsoft",
+    "Amazon",
+    "Meta",
+    "Apple",
+    "OpticsCore Systems",
+    "MetricShift Technologies",
+    "DeliverableAI",
+    "Pivot Dynamics",
+    "StakeholderTech"
+  ],
+  service: [
+    "Marriott International",
+    "Hilton Worldwide",
+    "Starbucks Corporation",
+    "Darden Restaurants",
+    "DoorDash Inc",
+    "Uber Eats",
+    "FedEx Corporation",
+    "UPS",
+    "DHL Express",
+    "Accenture"
+  ],
+  healthcare: [
+    "Mayo Clinic",
+    "Cleveland Clinic",
+    "Kaiser Permanente",
+    "UnitedHealth Group",
+    "CVS Health",
+    "Johnson & Johnson",
+    "Pfizer",
+    "Merck",
+    "Eli Lilly",
+    "Abbott Laboratories"
+  ]
+} as const;
+
+export const jobTitles = {
+  tech: [
+    "Senior Optics Engineer",
+    "Deliverable Optimization Specialist",
+    "Stakeholder Relations Architect",
+    "Resource Allocation Strategist",
+    "Velocity Management Lead",
+    "Agile Ceremony Director",
+    "Technical Debt Concealment Engineer",
+    "Sprint Velocity Architect",
+    "Metric Surface Engineer",
+    "Deadline Management Specialist"
+  ],
+  service: [
+    "Customer Satisfaction Architect",
+    "Resource Optimization Specialist",
+    "Crisis Management Lead",
+    "Emotional Labor Strategist",
+    "Volume Scaling Director",
+    "Availability Operations Lead",
+    "Conflict Resolution Specialist",
+    "Resource Distribution Manager",
+    "Customer Experience Architect",
+    "Satisfaction Metrics Lead"
+  ],
+  healthcare: [
+    "Patient Throughput Specialist",
+    "Documentation Compliance Lead",
+    "Resource Management Architect",
+    "Metric Optimization Director",
+    "Capacity Management Specialist",
+    "Regulatory Compliance Strategist",
+    "Quality Metrics Lead",
+    "Patient Experience Architect",
+    "Documentation Flow Manager",
+    "Compliance Strategy Director"
+  ]
+} as const;
+
+export const dateRanges = [
+  // Real date ranges
+  "Jan 2023 – Present",
+  "Mar 2022 – Dec 2023",
+  "Jun 2021 – Feb 2023",
+  "Sep 2020 – May 2022",
+  // Sarcastic/fanciful ones
+  "Way Too Long – Present",
+  "What Felt Like an Eternity",
+  "The Dark Ages – Present",
+  "Before the Great Resignation – After",
+  "The Before Times – The After Times",
+  "The Before Times – Present",
+  "The Great Recession – The Great Resignation",
+  "The Before Times – The Great Resignation",
+  "The Before Times – The After Times",
+  "The Before Times – The Great Resignation",
+  // Shorter/weirder ones
+  "That One Summer",
+  "My Awkward Phase"
+] as const;
+
+export const locations = {
+  tech: [
+    // Real cities
+    "San Francisco, CA",
+    "Seattle, WA",
+    "Austin, TX",
+    "New York, NY",
+    "Boston, MA",
+    // Dark/sarcastic ones
+    "Silicon Valley, CA",
+    "The Matrix, CA",
+    "The Machine, WA",
+    "The System, NY",
+    "The Matrix Reloaded, CA",
+    // Remote/digital ones
+    "Remote, Global",
+    "The Cloud, Internet",
+    "Digital Nomad, Worldwide",
+    "Virtual Office, Zoom",
+    "The Metaverse, VR",
+    "Remote First, Anywhere",
+    "Digital Workspace, Online",
+    "The Internet, WWW",
+    "Remote Team, Global",
+    "Digital Frontier, Cyberspace"
+  ],
+  service: [
+    // Real cities
+    "New York, NY",
+    "Los Angeles, CA",
+    "Chicago, IL",
+    "Houston, TX",
+    "Miami, FL",
+    "Las Vegas, NV",
+    "Orlando, FL",
+    "Nashville, TN",
+    "New Orleans, LA",
+    "San Diego, CA",
+    // Dark/sarcastic ones
+    "Corporate Hell, CA",
+    "Burnout City, CA",
+    "The Grind, NY",
+    "Hustle Town, TX",
+    "The Rat Race, IL",
+    "Customer Service Hell, FL",
+    "The Front Lines, NV",
+    "The Service Industry, LA",
+    "The Hospitality Zone, TN",
+    "The Retail Wasteland, CA"
+  ],
+  healthcare: [
+    // Real cities
+    "Boston, MA",
+    "Rochester, MN",
+    "Cleveland, OH",
+    "Baltimore, MD",
+    "Philadelphia, PA",
+    "Houston, TX",
+    "Nashville, TN",
+    "Pittsburgh, PA",
+    "Durham, NC",
+    "St. Louis, MO",
+    // Dark/sarcastic ones
+    "The Hospital District, MA",
+    "Medical Center, MN",
+    "The Clinic, OH",
+    "Healthcare Hub, MD",
+    "The ER, PA",
+    "The ICU, TX",
+    "The Ward, TN",
+    "The Lab, PA",
+    "The Pharmacy, NC",
+    "The Morgue, MO"
+  ]
+} as const; 

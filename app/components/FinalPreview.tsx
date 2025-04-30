@@ -1,7 +1,8 @@
 'use client'
+
 import { useWizard } from '../context/WizardContext'
 
-export default function ResumePreview() {
+export default function FinalPreview() {
   const { identity, content, industry } = useWizard()
   const { name, city, email } = identity
   const { objective, experience, skills } = content
@@ -33,9 +34,10 @@ export default function ResumePreview() {
               <h3 className="text-xl font-bold">{exp.company}</h3>
               <span>{exp.dateRange}</span>
             </div>
-            {exp.title && (
-              <p className="text-lg mb-2">{exp.title}</p>
-            )}
+            <div className="flex justify-between items-baseline mb-2">
+              <p className="text-lg">{exp.title}</p>
+              <span className="text-gray-600">{exp.location}</span>
+            </div>
             <ul className="list-disc ml-5">
               {exp.responsibilities.map((resp, i) => (
                 <li key={i} className="text-lg">{resp}</li>

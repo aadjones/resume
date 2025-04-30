@@ -1,6 +1,6 @@
 'use client';
 
-import ResumePreview from '../../components/ResumePreview';
+import FinalPreview from '../../components/FinalPreview';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../../context/WizardContext';
 import { useEffect, useState } from 'react';
@@ -56,7 +56,7 @@ export default function ReviewStep() {
       </div>
 
       <div id="resume-content" className="bg-white">
-        <ResumePreview />
+        <FinalPreview />
       </div>
 
       <div className="flex justify-end mt-6">
