@@ -3,13 +3,22 @@
 import ResumePreview from '../../components/ResumePreview';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../../context/WizardContext';
-import html2pdf from 'html2pdf.js';
+import { useEffect, useState } from 'react';
 
 export default function ReviewStep() {
   const router = useRouter();
   const { identity } = useWizard();
+  const [html2pdf, setHtml2pdf] = useState<any>(null);
+
+  useEffect(() => {
+    import('html2pdf.js').then((module) => {
+      setHtml2pdf(() => module.default);
+    });
+  }, []);
 
   const handleDownload = async () => {
+    if (!html2pdf) return;
+    
     const element = document.getElementById('resume-content');
     if (!element) return;
 
