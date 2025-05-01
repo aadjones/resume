@@ -81,12 +81,14 @@ export default function ReviewStep() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Main content area */}
-      <div className="lg:hidden">
-        <MobileResumePreview />
-      </div>
-      <div id="resume-preview-content" className="hidden lg:block">
-        <div className="max-w-4xl mx-auto bg-white shadow-lg my-8 p-8">
+      <div className="pb-24">
+        <div className="lg:hidden">
           <MobileResumePreview />
+        </div>
+        <div id="resume-preview-content" className="hidden lg:block">
+          <div className="max-w-4xl mx-auto bg-white shadow-lg my-8 p-8">
+            <MobileResumePreview />
+          </div>
         </div>
       </div>
 
