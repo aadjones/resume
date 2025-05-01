@@ -1,5 +1,5 @@
 import { getResidualSelfhoodReport } from '../utils/residual-selfhood';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 interface ResidualSelfhoodReportProps {
   distortionIndex: number;
@@ -22,10 +22,12 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
     warning: { current: 0, target: 100, isVisible: false }
   });
 
-  // Animation timing
-  const ANIMATION_DURATION = 1500; // ms
-  const STAGGER_DELAY = 400; // ms
-  const FRAME_RATE = 60; // fps
+  // Animation timing - memoized to prevent recreating on each render
+  const animationConfig = useMemo(() => ({
+    ANIMATION_DURATION: 1500, // ms
+    STAGGER_DELAY: 400, // ms
+    FRAME_RATE: 60 // fps
+  }), []);
 
   useEffect(() => {
     // Reset values when distortionIndex changes
@@ -36,9 +38,12 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
       warning: { current: 0, target: 100, isVisible: false }
     });
 
+    const animationFrames: number[] = [];
+    const timeouts: NodeJS.Timeout[] = [];
+
     // Start staggered animations
     Object.keys(values).forEach((key, index) => {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setValues(prev => ({
           ...prev,
           [key]: { ...prev[key], isVisible: true }
@@ -48,7 +53,7 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
         const startTime = Date.now();
         const animate = () => {
           const elapsed = Date.now() - startTime;
-          const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+          const progress = Math.min(elapsed / animationConfig.ANIMATION_DURATION, 1);
           
           setValues(prev => ({
             ...prev,
@@ -61,14 +66,24 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
           }));
 
           if (progress < 1) {
-            requestAnimationFrame(animate);
+            const frame = requestAnimationFrame(animate);
+            animationFrames.push(frame);
           }
         };
 
-        requestAnimationFrame(animate);
-      }, index * STAGGER_DELAY);
+        const frame = requestAnimationFrame(animate);
+        animationFrames.push(frame);
+      }, index * animationConfig.STAGGER_DELAY);
+
+      timeouts.push(timeout);
     });
-  }, [distortionIndex, report.residualHumanity, report.corporateCompliance, report.soulFragmentsDetected, values]);
+
+    // Cleanup function
+    return () => {
+      timeouts.forEach(clearTimeout);
+      animationFrames.forEach(cancelAnimationFrame);
+    };
+  }, [distortionIndex, report.residualHumanity, report.corporateCompliance, report.soulFragmentsDetected, animationConfig]);
 
   // Helper function to get color based on value
   const getColor = (key: string, value: number) => {
