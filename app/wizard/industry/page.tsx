@@ -1,7 +1,6 @@
 'use client';
 import { useWizard } from '../../context/WizardContext';
 import { useRouter } from 'next/navigation';
-import { BUTTON_TEXT } from '../../constants/ui-strings';
 
 type Industry = 'tech' | 'service' | 'healthcare';
 
@@ -11,23 +10,9 @@ export default function IndustryStep() {
 
   const industries: Industry[] = ['tech', 'service', 'healthcare'];
 
-  const handleAutofill = () => {
-    const unselectedIndustries = industries.filter(ind => ind !== industry);
-    const randomIndustry = unselectedIndustries[Math.floor(Math.random() * unselectedIndustries.length)];
-    setIndustry(randomIndustry);
-  };
-
   return (
     <div className="max-w-xl mx-auto py-8">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Choose Your Industry</h1>
-        <button
-          onClick={handleAutofill}
-          className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          {BUTTON_TEXT.AUTO_FILL}
-        </button>
-      </div>
+      <h1 className="text-2xl font-bold mb-4">Choose Your Industry</h1>
       {industries.map((opt) => (
         <label
           key={opt}

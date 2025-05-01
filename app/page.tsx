@@ -40,7 +40,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-6 text-gray-600">
-                &ldquo;What did I just see?&rdquo;
+                "What did I just see?"
               </p>
               <div className="mt-4 flex text-[#FF6B3D] text-xl">
                 ★☆☆☆☆
@@ -57,7 +57,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-6 text-gray-600">
-                &ldquo;Thanks to this tool, I can lie with dignity.&rdquo;
+                "Thanks to this tool, I can lie with dignity."
               </p>
               <div className="mt-4 flex text-[#FF6B3D] text-xl">
                 ★★★★★
@@ -74,7 +74,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="mt-6 text-gray-600">
-                &ldquo;I used to spend hours pretending to be confident. Now I just press a button.&rdquo;
+                "I used to spend hours pretending to be confident. Now I just press a button."
               </p>
               <div className="mt-4 flex text-[#FF6B3D] text-xl">
                 ★★★★☆

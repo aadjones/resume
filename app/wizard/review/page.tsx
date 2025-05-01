@@ -54,13 +54,13 @@ export default function ReviewStep() {
       const blob = await response.blob();
 
       // Create download link
-      const url = URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `survival_resume_${identity.name.replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(a);
       a.click();
-      URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
       console.error('Failed to generate PDF:', error);

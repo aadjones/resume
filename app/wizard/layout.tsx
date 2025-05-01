@@ -74,14 +74,12 @@ function WizardLayoutContent({
 
 export default function WizardLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: { step: Step };
 }) {
   return (
     <WizardProvider>
-      <WizardLayoutContent params={params}>{children}</WizardLayoutContent>
+      {children}
     </WizardProvider>
   );
 } 

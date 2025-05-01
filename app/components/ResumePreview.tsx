@@ -40,11 +40,10 @@ export default function ResumePreview() {
     let observer: ResizeObserver | null = null
     
     const setupResizeObserver = async () => {
-      const { default: ResizeObserver } = await import('resize-observer-polyfill');
-      if (!containerRef.current) return;
-      
-      observer = new ResizeObserver(adjustScale);
-      observer.observe(containerRef.current);
+      if (typeof window !== 'undefined' && containerRef.current) {
+        observer = new ResizeObserver(adjustScale)
+        observer.observe(containerRef.current)
+      }
     }
 
     setupResizeObserver()
