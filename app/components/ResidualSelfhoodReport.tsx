@@ -68,7 +68,7 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
         requestAnimationFrame(animate);
       }, index * STAGGER_DELAY);
     });
-  }, [distortionIndex]);
+  }, [distortionIndex, report.residualHumanity, report.corporateCompliance, report.soulFragmentsDetected, values]);
 
   // Helper function to get color based on value
   const getColor = (key: string, value: number) => {
