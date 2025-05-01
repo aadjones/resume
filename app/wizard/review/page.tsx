@@ -3,68 +3,91 @@
 import FinalPreview from '../../components/FinalPreview';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../../context/WizardContext';
-import { useEffect, useState } from 'react';
 
 export default function ReviewStep() {
   const router = useRouter();
   const { identity } = useWizard();
-  const [html2pdf, setHtml2pdf] = useState<any>(null);
-
-  useEffect(() => {
-    import('html2pdf.js').then((module) => {
-      setHtml2pdf(() => module.default);
-    });
-  }, []);
 
   const handleDownload = async () => {
-    if (!html2pdf) return;
-    
-    const element = document.getElementById('resume-content');
+    const element = document.getElementById('resume-preview-content');
     if (!element) return;
 
-    const opt = {
-      margin: 0.5,
-      filename: `survival_resume_${identity.name.replace(/\s+/g, '_')}.pdf`,
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { 
-        scale: 3, // Higher scale for better quality
-        useCORS: true,
-        letterRendering: true,
-      },
-      jsPDF: { 
-        unit: 'in',
-        format: 'letter',
-        orientation: 'portrait'
-      }
-    };
-
     try {
-      await html2pdf().set(opt).from(element).save();
+      // Get all stylesheets
+      const styles = Array.from(document.styleSheets)
+        .map(sheet => {
+          try {
+            return Array.from(sheet.cssRules)
+              .map(rule => rule.cssText)
+              .join('\n');
+          } catch (e) {
+            // Skip external stylesheets
+            return '';
+          }
+        })
+        .join('\n');
+
+      // Create a complete HTML document with styles
+      const content = `
+        <html>
+          <head>
+            <style>${styles}</style>
+          </head>
+          <body style="margin:0;padding:0;">
+            ${element.outerHTML}
+          </body>
+        </html>
+      `;
+
+      // Call our API endpoint
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ html: content }),
+      });
+
+      if (!response.ok) throw new Error('Failed to generate PDF');
+
+      // Get the PDF blob
+      const blob = await response.blob();
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `survival_resume_${identity.name.replace(/\s+/g, '_')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
     } catch (error) {
       console.error('Failed to generate PDF:', error);
     }
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={() => router.push('/wizard/profile')} className="text-gray-600">
-          ← Back
-        </button>
-        <h1 className="text-2xl font-heading font-bold">Review & Export</h1>
-        <div /> {/* placeholder for alignment */}
-      </div>
-
-      <div id="resume-content" className="bg-white">
+    <div className="min-h-screen bg-gray-100">
+      {/* Main content area */}
+      <div id="resume-preview-content">
         <FinalPreview />
       </div>
 
-      <div className="flex justify-end mt-6">
+      {/* Fixed footer */}
+      <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-between items-center">
+        <button
+          onClick={() => router.push('/wizard/skills')}
+          className="px-6 py-2 text-gray-600 hover:text-gray-800"
+        >
+          ← Back to Skills
+        </button>
+        
         <button
           onClick={handleDownload}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
         >
-          Download as PDF
+          Download Resume as PDF
         </button>
       </div>
     </div>

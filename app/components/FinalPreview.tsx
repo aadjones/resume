@@ -3,59 +3,77 @@
 import { useWizard } from '../context/WizardContext'
 
 export default function FinalPreview() {
-  const { identity, content, industry } = useWizard()
+  const { identity, content } = useWizard()
   const { name, city, email } = identity
   const { objective, experience, skills } = content
 
   return (
-    <div className="p-8 bg-white text-gray-900 max-w-4xl mx-auto">
-      {/* HEADER */}
-      <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2">{name || 'Your Name'}</h1>
-        <div className="text-gray-600 text-lg">
-          {city || 'City'} • {email || 'email@example.com'}
+    <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-8">
+      <div 
+        className="bg-white mx-auto shadow-lg border border-gray-200" 
+        style={{
+          width: '8.5in',
+          height: '11in',
+          padding: '0.75in',
+          boxSizing: 'border-box',
+          fontSize: '11pt',
+          lineHeight: '1.3',
+          overflow: 'hidden'
+        }}
+      >
+        {/* HEADER */}
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold mb-1 text-center">{name || 'Your Name'}</h1>
+          <div className="text-gray-600 text-sm text-center">
+            {city || 'City'} • {email || 'email@example.com'}
+          </div>
         </div>
-      </header>
 
-      {/* OBJECTIVE */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-1">Objective</h2>
-        <div className="border-b-2 border-black mb-4" />
-        <p className="text-lg">{objective}</p>
-      </div>
+        {/* OBJECTIVE */}
+        <div className="mb-4">
+          <h2 className="text-lg font-bold border-b border-black pb-1 mb-2">Objective</h2>
+          <p className="text-sm">{objective}</p>
+        </div>
 
-      {/* EXPERIENCE */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-1">Experience</h2>
-        <div className="border-b-2 border-black mb-4" />
-        {experience.map((exp, index) => (
-          <div key={index} className="mb-6">
-            <div className="flex justify-between items-baseline">
-              <h3 className="text-xl font-bold">{exp.company}</h3>
-              <span>{exp.dateRange}</span>
+        {/* EXPERIENCE */}
+        <div className="mb-4">
+          <h2 className="text-lg font-bold border-b border-black pb-1 mb-2">Experience</h2>
+          {experience
+            .filter(exp => exp.company.trim() !== '' || exp.title.trim() !== '' || exp.dateRange.trim() !== '' || exp.location.trim() !== '')
+            .map((exp, index) => (
+            <div key={index} className="mb-3">
+              <div className="flex justify-between items-baseline mb-0.5">
+                <h3 className="text-base font-bold">{exp.company}</h3>
+                <span className="text-sm">{exp.dateRange}</span>
+              </div>
+              <div className="flex justify-between items-baseline mb-1">
+                <p className="text-sm italic">{exp.title}</p>
+                <span className="text-xs text-gray-600">{exp.location}</span>
+              </div>
+              {exp.responsibilities.filter(resp => resp.trim() !== '').length > 0 && (
+                <ul className="list-disc ml-4 text-sm">
+                  {exp.responsibilities
+                    .filter(resp => resp.trim() !== '')
+                    .map((resp, i) => (
+                    <li key={i} className="mb-0.5">{resp}</li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <div className="flex justify-between items-baseline mb-2">
-              <p className="text-lg">{exp.title}</p>
-              <span className="text-gray-600">{exp.location}</span>
-            </div>
-            <ul className="list-disc ml-5">
-              {exp.responsibilities.map((resp, i) => (
-                <li key={i} className="text-lg">{resp}</li>
+          ))}
+        </div>
+
+        {/* SKILLS */}
+        <div>
+          <h2 className="text-lg font-bold border-b border-black pb-1 mb-2">Skills</h2>
+          {skills.length > 0 && skills[0] !== '' && (
+            <ul className="list-disc ml-4 text-sm">
+              {skills.map((skill, i) => (
+                <li key={i} className="mb-0.5">{skill}</li>
               ))}
             </ul>
-          </div>
-        ))}
-      </div>
-
-      {/* SKILLS */}
-      <div>
-        <h2 className="text-2xl font-bold mb-1">Skills</h2>
-        <div className="border-b-2 border-black mb-4" />
-        <ul className="list-disc ml-5">
-          {skills.map((skill, i) => (
-            <li key={i} className="text-lg">{skill}</li>
-          ))}
-        </ul>
+          )}
+        </div>
       </div>
     </div>
   );

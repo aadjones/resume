@@ -30,7 +30,7 @@ type WizardState = {
 const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export function WizardProvider({ children }: { children: ReactNode }) {
-  const [industry, setIndustry] = useState<Industry>('tech');
+  const [industry, setIndustryState] = useState<Industry>('tech');
   const [identity, setIdentity] = useState({ 
     name: '',
     city: '',
@@ -42,14 +42,16 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     skills: []
   });
 
-  useEffect(() => {
-    const { applicantNumber, city, email } = generateApplicantHeader();
-    setIdentity({
-      name: applicantNumber,
-      city,
-      email
+  // Wrap setIndustry to also clear content when industry changes
+  const setIndustry = (newIndustry: Industry) => {
+    setIndustryState(newIndustry);
+    // Clear all content when industry changes
+    setContent({
+      objective: '',
+      experience: [],
+      skills: []
     });
-  }, []); // Only run once on mount
+  };
 
   return (
     <WizardContext.Provider value={{ industry, setIndustry, identity, setIdentity, content, setContent }}>
