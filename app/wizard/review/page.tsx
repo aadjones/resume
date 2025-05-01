@@ -3,6 +3,7 @@
 import FinalPreview from '../../components/FinalPreview';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../../context/WizardContext';
+import { useEffect } from 'react';
 
 export default function ReviewStep() {
   const router = useRouter();
@@ -54,13 +55,13 @@ export default function ReviewStep() {
       const blob = await response.blob();
 
       // Create download link
-      const url = window.URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `survival_resume_${identity.name.replace(/\s+/g, '_')}.pdf`;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
       console.error('Failed to generate PDF:', error);
