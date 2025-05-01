@@ -5,9 +5,8 @@ import { useWizard } from '../context/WizardContext';
 import PersonalForm from './PersonalForm';
 import ExperienceForm from './ExperienceForm';
 import SkillsForm from './SkillsForm';
-import FinalPreview from './FinalPreview';
 import StepControls from './StepControls';
-import ResumePreview from './ResumePreview';
+import WizardLayout from './WizardLayout';
 
 // Map URLs to step indices
 const STEP_MAPPING = {
@@ -44,16 +43,14 @@ export default function WizardPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex gap-8">
-        {/* Left Panel - Forms */}
-        <div className="w-1/2 relative min-h-full pb-20">
+      <WizardLayout>
+        <div className="relative min-h-full pb-20">
           {step === 0 && <PersonalForm />}
           {step === 1 && <ExperienceForm />}
           {step === 2 && <SkillsForm />}
-          {step === 3 && <FinalPreview />}
           
           {/* Sticky Navigation Footer */}
-          <div className="fixed bottom-0 left-0 w-[50%] bg-white dark:bg-gray-900 border-t p-4">
+          <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4">
             <StepControls 
               step={step}
               total={4}
@@ -62,14 +59,7 @@ export default function WizardPage() {
             />
           </div>
         </div>
-
-        {/* Right Panel - Preview */}
-        <div className="w-1/2">
-          <div className="sticky top-8">
-            <ResumePreview />
-          </div>
-        </div>
-      </div>
+      </WizardLayout>
     </div>
   );
 } 
