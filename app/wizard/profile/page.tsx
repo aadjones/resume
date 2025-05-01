@@ -1,7 +1,16 @@
 'use client';
 
-import WizardPage from '../../components/WizardPage';
+import PersonalForm from '../../components/PersonalForm';
+import WizardPageLayout from '../../components/WizardPageLayout';
 
 export default function ProfileStep() {
-  return <WizardPage />;
+  return (
+    <WizardPageLayout
+      previousStep="/wizard/industry"
+      nextStep="/wizard/experience"
+      nextButtonText="Continue to Experience"
+    >
+      <PersonalForm />
+    </WizardPageLayout>
+  );
 } 

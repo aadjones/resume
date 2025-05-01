@@ -573,22 +573,6 @@ export default function ExperienceForm() {
           + Add Another Job
         </button>
       </div>
-
-      {/* Sticky Navigation Footer - now constrained to left half */}
-      <div className="fixed bottom-0 left-0 w-[50%] bg-white dark:bg-gray-900 border-t p-4 flex justify-between items-center">
-        <button
-          onClick={() => router.push('/wizard/profile')}
-          className="px-6 py-2 text-gray-600 hover:text-gray-800"
-        >
-          ← Back
-        </button>
-        <button
-          onClick={() => router.push('/wizard/skills')}
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 ml-auto"
-        >
-          Continue to Skills →
-        </button>
-      </div>
     </FormLayout>
   );
 }

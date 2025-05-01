@@ -1,17 +1,26 @@
 'use client';
 
-import FinalPreview from '../../components/FinalPreview';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../../context/WizardContext';
-import { useEffect } from 'react';
+import WizardPageLayout from '../../components/WizardPageLayout';
+import MobileResumePreview from '../../components/MobileResumePreview';
+import { useEffect, useState } from 'react';
+import { FEATURE_FLAGS } from '../../config/feature-flags';
 
 export default function ReviewStep() {
   const router = useRouter();
   const { identity } = useWizard();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
+    if (isDownloading) return;
+    setIsDownloading(true);
+    
     const element = document.getElementById('resume-preview-content');
-    if (!element) return;
+    if (!element) {
+      setIsDownloading(false);
+      return;
+    }
 
     try {
       // Get all stylesheets
@@ -65,14 +74,23 @@ export default function ReviewStep() {
       document.body.removeChild(a);
     } catch (error) {
       console.error('Failed to generate PDF:', error);
+    } finally {
+      setIsDownloading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Main content area */}
-      <div id="resume-preview-content">
-        <FinalPreview />
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* Main content area with proper scrolling */}
+      <div className="flex-1 overflow-y-auto pb-24">
+        <div className="lg:hidden">
+          <MobileResumePreview />
+        </div>
+        <div id="resume-preview-content" className="hidden lg:block">
+          <div className="max-w-4xl mx-auto bg-white shadow-lg my-8 p-8">
+            <MobileResumePreview />
+          </div>
+        </div>
       </div>
 
       {/* Fixed footer */}
@@ -84,12 +102,15 @@ export default function ReviewStep() {
           ← Back to Skills
         </button>
         
-        <button
-          onClick={handleDownload}
-          className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
-        >
-          Download Resume as PDF
-        </button>
+        {FEATURE_FLAGS.ENABLE_PDF_DOWNLOAD && (
+          <button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+          >
+            {isDownloading ? 'Generating PDF...' : 'Download Resume as PDF'}
+          </button>
+        )}
       </div>
     </div>
   );
