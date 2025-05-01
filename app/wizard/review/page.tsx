@@ -5,6 +5,7 @@ import { useWizard } from '../../context/WizardContext';
 import WizardPageLayout from '../../components/WizardPageLayout';
 import MobileResumePreview from '../../components/MobileResumePreview';
 import { useEffect, useState } from 'react';
+import { FEATURE_FLAGS } from '../../config/feature-flags';
 
 export default function ReviewStep() {
   const router = useRouter();
@@ -79,9 +80,9 @@ export default function ReviewStep() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Main content area */}
-      <div className="pb-24">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      {/* Main content area with proper scrolling */}
+      <div className="flex-1 overflow-y-auto pb-24">
         <div className="lg:hidden">
           <MobileResumePreview />
         </div>
@@ -101,13 +102,15 @@ export default function ReviewStep() {
           ← Back to Skills
         </button>
         
-        <button
-          onClick={handleDownload}
-          disabled={isDownloading}
-          className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
-        >
-          {isDownloading ? 'Generating PDF...' : 'Download Resume as PDF'}
-        </button>
+        {FEATURE_FLAGS.ENABLE_PDF_DOWNLOAD && (
+          <button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+          >
+            {isDownloading ? 'Generating PDF...' : 'Download Resume as PDF'}
+          </button>
+        )}
       </div>
     </div>
   );
