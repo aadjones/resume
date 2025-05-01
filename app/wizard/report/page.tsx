@@ -6,7 +6,12 @@ import ResidualSelfhoodReport from '../../components/ResidualSelfhoodReport';
 
 export default function ReportPage() {
   const router = useRouter();
-  const { distortionIndex } = useWizard();
+  const { distortionIndex, resetWizard } = useWizard();
+
+  const handleStartOver = () => {
+    resetWizard();
+    router.push('/wizard/industry');
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -18,12 +23,12 @@ export default function ReportPage() {
       </div>
 
       {/* Fixed footer */}
-      <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-between items-center">
+      <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-center items-center">
         <button
-          onClick={() => router.push('/wizard/review')}
-          className="px-6 py-2 text-gray-600 hover:text-gray-800"
+          onClick={handleStartOver}
+          className="px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
         >
-          ← Back to Review
+          Start Over
         </button>
       </div>
     </div>

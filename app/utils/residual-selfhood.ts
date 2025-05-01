@@ -7,23 +7,23 @@ type ResidualSelfhoodReport = {
 };
 
 const AURA_SPECTRUM = [
-  "Soft Blue",
-  "Muted Beige",
-  "Strategic Gray",
   "Corporate Chrome",
+  "Strategic Gray",
+  "Muted Beige",
+  "Soft Blue",
   "Bleeding Magenta",
   "Glitching Violet"
 ] as const;
 
 export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelfhoodReport {
   // Calculate residual humanity (minimum 0)
-  const residualHumanity = Math.max(0, 100 - distortionIndex * 13);
+  const residualHumanity = Math.max(0, 100 - distortionIndex * 5);
 
   // Calculate corporate compliance (maximum 100)
-  const corporateCompliance = Math.min(100, distortionIndex * 18);
+  const corporateCompliance = Math.min(100, distortionIndex * 5);
 
   // Calculate soul fragments (minimum 0)
-  const soulFragmentsDetected = Math.max(0, 4 - Math.floor(distortionIndex / 2));
+  const soulFragmentsDetected = Math.max(0, 4 - Math.floor(distortionIndex / 5));
 
   // Determine dominant aura based on distortion index
   const auraIndex = Math.min(distortionIndex, AURA_SPECTRUM.length - 1);
@@ -32,13 +32,13 @@ export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelf
   // Generate warning based on residual humanity
   let warning: string;
   if (residualHumanity >= 80) {
-    warning = "Your essence remains largely intact. Proceed with caution.";
+    warning = "Your essence remains largely intact. Consider recalibration for better corporate alignment.";
   } else if (residualHumanity >= 50) {
-    warning = "Significant distortion detected. Consider recalibration.";
+    warning = "Significant distortion detected. Your corporate compliance needs improvement.";
   } else if (residualHumanity >= 20) {
-    warning = "Critical levels of corporate assimilation. Immediate intervention recommended.";
+    warning = "Critical levels of corporate assimilation. You're on the right track.";
   } else {
-    warning = "WARNING: Complete corporate convergence imminent. Seek immediate deprogramming.";
+    warning = "Excellent corporate convergence achieved. You're a model employee.";
   }
 
   return {

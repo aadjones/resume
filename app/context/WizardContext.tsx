@@ -27,6 +27,7 @@ type WizardState = {
   setContent: React.Dispatch<React.SetStateAction<ContentState>>;
   distortionIndex: number;
   incrementDistortionIndex: (amount: number) => void;
+  resetWizard: () => void;
 };
 
 const WizardContext = createContext<WizardState | undefined>(undefined);
@@ -60,6 +61,13 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     setDistortionIndex(prev => prev + amount);
   };
 
+  const resetWizard = () => {
+    setIndustryState('tech');
+    setIdentity({ name: '', city: '', email: '' });
+    setContent({ objective: '', experience: [], skills: [] });
+    setDistortionIndex(0);
+  };
+
   return (
     <WizardContext.Provider value={{ 
       industry, 
@@ -69,7 +77,8 @@ export function WizardProvider({ children }: { children: ReactNode }) {
       content, 
       setContent,
       distortionIndex,
-      incrementDistortionIndex
+      incrementDistortionIndex,
+      resetWizard
     }}>
       {children}
     </WizardContext.Provider>

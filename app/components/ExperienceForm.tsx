@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useWizard } from '../context/WizardContext';
 import FormLayout from './FormLayout';
 import type { ExperienceEntry } from '../context/WizardContext';
-import { BUTTON_TEXT, ERROR_MESSAGES, BUTTON_STYLES, BUTTON_TOOLTIPS } from '../constants/ui-strings';
+import { BUTTON_TEXT, ERROR_MESSAGES, BUTTON_STYLES, BUTTON_TOOLTIPS, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
 import { survivalPhrases, companyNames, jobTitles, dateRanges, locations } from '../data/survival-phrases';
 import { FEATURE_FLAGS } from '../config/feature-flags';
 
@@ -115,8 +115,8 @@ export default function ExperienceForm() {
       ),
     }));
 
-    // Increment distortion index by 3 for "Autofill All"
-    incrementDistortionIndex(3);
+    // Increment distortion index for bulk autofill
+    incrementDistortionIndex(DISTORTION_MULTIPLIERS.BULK_AUTOFILL);
 
     // Clear any existing errors
     setError(null);
@@ -280,8 +280,8 @@ export default function ExperienceForm() {
                               ...prev,
                               companies: new Set([...prev.companies, newValue])
                             }));
-                            // Increment distortion index by 1 for individual field autofill
-                            incrementDistortionIndex(1);
+                            // Increment distortion index for individual field autofill
+                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -353,8 +353,8 @@ export default function ExperienceForm() {
                               ...prev,
                               titles: new Set([...prev.titles, newValue])
                             }));
-                            // Increment distortion index by 1 for individual field autofill
-                            incrementDistortionIndex(1);
+                            // Increment distortion index for individual field autofill
+                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -427,8 +427,8 @@ export default function ExperienceForm() {
                               : dateRanges.filter(range => !range.endsWith('Present'));
                             const newValue = validDateRanges[Math.floor(Math.random() * validDateRanges.length)];
                             updateEntry(jobIndex, 'dateRange', newValue);
-                            // Increment distortion index by 1 for individual field autofill
-                            incrementDistortionIndex(1);
+                            // Increment distortion index for individual field autofill
+                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -498,8 +498,8 @@ export default function ExperienceForm() {
                               ...prev,
                               locations: new Set([...prev.locations, newValue])
                             }));
-                            // Increment distortion index by 1 for individual field autofill
-                            incrementDistortionIndex(1);
+                            // Increment distortion index for individual field autofill
+                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}

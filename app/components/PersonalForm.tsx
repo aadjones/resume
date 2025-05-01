@@ -3,7 +3,7 @@
 import { useWizard } from '../context/WizardContext';
 import ObjectiveForm from './ObjectiveForm';
 import FormLayout from './FormLayout';
-import { BUTTON_STYLES, BUTTON_TEXT } from '../constants/ui-strings';
+import { BUTTON_STYLES, BUTTON_TEXT, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
 import { survivalPhrases, locations } from '../data/survival-phrases';
 
 export default function PersonalForm() {
@@ -44,8 +44,8 @@ export default function PersonalForm() {
       objective: randomObjective
     }));
 
-    // Increment distortion index by 3 for "Autofill All"
-    incrementDistortionIndex(3);
+    // Increment distortion index for bulk autofill
+    incrementDistortionIndex(DISTORTION_MULTIPLIERS.BULK_AUTOFILL);
   };
 
   return (
@@ -81,8 +81,8 @@ export default function PersonalForm() {
                   <button
                     onClick={() => {
                       handleIdentityChange('name', `Applicant #${getRandomNumber()}`);
-                      // Increment distortion index by 1 for individual field autofill
-                      incrementDistortionIndex(1);
+                      // Increment distortion index for individual field autofill
+                      incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                     }}
                     className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                   >
@@ -110,8 +110,8 @@ export default function PersonalForm() {
                     <button
                       onClick={() => {
                         handleIdentityChange('city', getRandomCity());
-                        // Increment distortion index by 1 for individual field autofill
-                        incrementDistortionIndex(1);
+                        // Increment distortion index for individual field autofill
+                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                       }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
@@ -138,8 +138,8 @@ export default function PersonalForm() {
                     <button
                       onClick={() => {
                         handleIdentityChange('email', `applicant.${getRandomNumber()}@flow.io`);
-                        // Increment distortion index by 1 for individual field autofill
-                        incrementDistortionIndex(1);
+                        // Increment distortion index for individual field autofill
+                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
                       }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
