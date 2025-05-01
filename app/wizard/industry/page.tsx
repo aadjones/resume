@@ -6,7 +6,7 @@ import { BUTTON_TEXT } from '../../constants/ui-strings';
 type Industry = 'tech' | 'service' | 'healthcare';
 
 export default function IndustryStep() {
-  const { industry, setIndustry } = useWizard();
+  const { industry, setIndustry, incrementDistortionIndex } = useWizard();
   const router = useRouter();
 
   const industries: Industry[] = ['tech', 'service', 'healthcare'];
@@ -16,6 +16,7 @@ export default function IndustryStep() {
     if (unselectedIndustries.length > 0) {
       const randomIndex = Math.floor(Math.random() * unselectedIndustries.length);
       setIndustry(unselectedIndustries[randomIndex]);
+      incrementDistortionIndex(1);
     }
   };
 

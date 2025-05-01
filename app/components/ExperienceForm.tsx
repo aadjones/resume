@@ -26,7 +26,7 @@ const emptyJob: ExperienceEntry = {
 
 export default function ExperienceForm() {
   const router = useRouter();
-  const { content, setContent, industry } = useWizard();
+  const { content, setContent, industry, incrementDistortionIndex } = useWizard();
   const [loadingState, setLoadingState] = useState<LoadingState>(null);
   const [error, setError] = useState<string | null>(null);
   
@@ -114,6 +114,9 @@ export default function ExperienceForm() {
           : entry
       ),
     }));
+
+    // Increment distortion index by 3 for "Autofill All"
+    incrementDistortionIndex(3);
 
     // Clear any existing errors
     setError(null);
@@ -277,6 +280,8 @@ export default function ExperienceForm() {
                               ...prev,
                               companies: new Set([...prev.companies, newValue])
                             }));
+                            // Increment distortion index by 1 for individual field autofill
+                            incrementDistortionIndex(1);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -348,6 +353,8 @@ export default function ExperienceForm() {
                               ...prev,
                               titles: new Set([...prev.titles, newValue])
                             }));
+                            // Increment distortion index by 1 for individual field autofill
+                            incrementDistortionIndex(1);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -420,6 +427,8 @@ export default function ExperienceForm() {
                               : dateRanges.filter(range => !range.endsWith('Present'));
                             const newValue = validDateRanges[Math.floor(Math.random() * validDateRanges.length)];
                             updateEntry(jobIndex, 'dateRange', newValue);
+                            // Increment distortion index by 1 for individual field autofill
+                            incrementDistortionIndex(1);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
@@ -489,6 +498,8 @@ export default function ExperienceForm() {
                               ...prev,
                               locations: new Set([...prev.locations, newValue])
                             }));
+                            // Increment distortion index by 1 for individual field autofill
+                            incrementDistortionIndex(1);
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}

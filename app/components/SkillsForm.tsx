@@ -7,7 +7,7 @@ import { survivalPhrases } from '../data/survival-phrases';
 import { BUTTON_STYLES, BUTTON_TEXT, BUTTON_TOOLTIPS } from '../constants/ui-strings';
 
 export default function SkillsForm() {
-  const { content, setContent, industry } = useWizard();
+  const { content, setContent, industry, incrementDistortionIndex } = useWizard();
 
   // Initialize with one blank skill
   useEffect(() => {
@@ -44,6 +44,8 @@ export default function SkillsForm() {
     const skills = survivalPhrases[industry].skills;
     const randomSkill = skills[Math.floor(Math.random() * skills.length)];
     updateSkill(index, randomSkill);
+    // Increment distortion index by 1 for individual field autofill
+    incrementDistortionIndex(1);
   };
 
   const handleAutofillAll = () => {

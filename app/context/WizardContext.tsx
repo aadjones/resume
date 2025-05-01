@@ -25,6 +25,8 @@ type WizardState = {
   setIdentity: (id: { name: string; city: string; email: string }) => void;
   content: ContentState;
   setContent: React.Dispatch<React.SetStateAction<ContentState>>;
+  distortionIndex: number;
+  incrementDistortionIndex: (amount: number) => void;
 };
 
 const WizardContext = createContext<WizardState | undefined>(undefined);
@@ -41,6 +43,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     experience: [],
     skills: []
   });
+  const [distortionIndex, setDistortionIndex] = useState(0);
 
   // Wrap setIndustry to also clear content when industry changes
   const setIndustry = (newIndustry: Industry) => {
@@ -53,8 +56,21 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const incrementDistortionIndex = (amount: number) => {
+    setDistortionIndex(prev => prev + amount);
+  };
+
   return (
-    <WizardContext.Provider value={{ industry, setIndustry, identity, setIdentity, content, setContent }}>
+    <WizardContext.Provider value={{ 
+      industry, 
+      setIndustry, 
+      identity, 
+      setIdentity, 
+      content, 
+      setContent,
+      distortionIndex,
+      incrementDistortionIndex
+    }}>
       {children}
     </WizardContext.Provider>
   );
