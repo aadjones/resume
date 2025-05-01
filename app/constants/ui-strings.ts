@@ -15,6 +15,11 @@ export const ERROR_MESSAGES = {
   REWRITE_FAILED: 'Recast failed. Please try again.'
 } as const;
 
+export const DISTORTION_MULTIPLIERS = {
+  INDIVIDUAL_FIELD: 1,
+  BULK_AUTOFILL: 5
+} as const;
+
 export const BUTTON_STYLES = {
   ACTION: 'text-sm text-blue-600 hover:text-blue-800 transition-colors',
   ACTION_DISABLED: 'text-sm text-gray-400 cursor-not-allowed',

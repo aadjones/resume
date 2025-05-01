@@ -3,11 +3,11 @@
 import { useWizard } from '../context/WizardContext';
 import ObjectiveForm from './ObjectiveForm';
 import FormLayout from './FormLayout';
-import { BUTTON_STYLES, BUTTON_TEXT } from '../constants/ui-strings';
+import { BUTTON_STYLES, BUTTON_TEXT, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
 import { survivalPhrases, locations } from '../data/survival-phrases';
 
 export default function PersonalForm() {
-  const { identity, setIdentity, content, setContent, industry } = useWizard();
+  const { identity, setIdentity, content, setContent, industry, incrementDistortionIndex } = useWizard();
 
   const handleIdentityChange = (field: 'name' | 'city' | 'email', value: string) => {
     setIdentity({
@@ -43,6 +43,9 @@ export default function PersonalForm() {
       ...prev,
       objective: randomObjective
     }));
+
+    // Increment distortion index for bulk autofill
+    incrementDistortionIndex(DISTORTION_MULTIPLIERS.BULK_AUTOFILL);
   };
 
   return (
@@ -76,7 +79,11 @@ export default function PersonalForm() {
                 />
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleIdentityChange('name', `Applicant #${getRandomNumber()}`)}
+                    onClick={() => {
+                      handleIdentityChange('name', `Applicant #${getRandomNumber()}`);
+                      // Increment distortion index for individual field autofill
+                      incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                    }}
                     className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                   >
                     {BUTTON_TEXT.AUTO_FILL}
@@ -101,7 +108,11 @@ export default function PersonalForm() {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleIdentityChange('city', getRandomCity())}
+                      onClick={() => {
+                        handleIdentityChange('city', getRandomCity());
+                        // Increment distortion index for individual field autofill
+                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                      }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
                       {BUTTON_TEXT.AUTO_FILL}
@@ -125,7 +136,11 @@ export default function PersonalForm() {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleIdentityChange('email', `applicant.${getRandomNumber()}@flow.io`)}
+                      onClick={() => {
+                        handleIdentityChange('email', `applicant.${getRandomNumber()}@flow.io`);
+                        // Increment distortion index for individual field autofill
+                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                      }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
                       {BUTTON_TEXT.AUTO_FILL}

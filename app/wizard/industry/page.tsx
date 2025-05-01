@@ -1,12 +1,12 @@
 'use client';
 import { useWizard } from '../../context/WizardContext';
 import { useRouter } from 'next/navigation';
-import { BUTTON_TEXT } from '../../constants/ui-strings';
+import { BUTTON_TEXT, DISTORTION_MULTIPLIERS } from '../../constants/ui-strings';
 
 type Industry = 'tech' | 'service' | 'healthcare';
 
 export default function IndustryStep() {
-  const { industry, setIndustry } = useWizard();
+  const { industry, setIndustry, incrementDistortionIndex } = useWizard();
   const router = useRouter();
 
   const industries: Industry[] = ['tech', 'service', 'healthcare'];
@@ -16,6 +16,7 @@ export default function IndustryStep() {
     if (unselectedIndustries.length > 0) {
       const randomIndex = Math.floor(Math.random() * unselectedIndustries.length);
       setIndustry(unselectedIndustries[randomIndex]);
+      incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
     }
   };
 

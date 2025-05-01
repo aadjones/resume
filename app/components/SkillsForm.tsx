@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import { useWizard } from '../context/WizardContext';
 import FormLayout from './FormLayout';
 import { survivalPhrases } from '../data/survival-phrases';
-import { BUTTON_STYLES, BUTTON_TEXT, BUTTON_TOOLTIPS } from '../constants/ui-strings';
+import { BUTTON_STYLES, BUTTON_TEXT, BUTTON_TOOLTIPS, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
 
 export default function SkillsForm() {
-  const { content, setContent, industry } = useWizard();
+  const { content, setContent, industry, incrementDistortionIndex } = useWizard();
 
   // Initialize with one blank skill
   useEffect(() => {
@@ -44,6 +44,8 @@ export default function SkillsForm() {
     const skills = survivalPhrases[industry].skills;
     const randomSkill = skills[Math.floor(Math.random() * skills.length)];
     updateSkill(index, randomSkill);
+    // Increment distortion index for individual field autofill
+    incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
   };
 
   const handleAutofillAll = () => {

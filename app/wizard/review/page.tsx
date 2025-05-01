@@ -10,74 +10,6 @@ import { FEATURE_FLAGS } from '../../config/feature-flags';
 export default function ReviewStep() {
   const router = useRouter();
   const { identity } = useWizard();
-  const [isDownloading, setIsDownloading] = useState(false);
-
-  const handleDownload = async () => {
-    if (isDownloading) return;
-    setIsDownloading(true);
-    
-    const element = document.getElementById('resume-preview-content');
-    if (!element) {
-      setIsDownloading(false);
-      return;
-    }
-
-    try {
-      // Get all stylesheets
-      const styles = Array.from(document.styleSheets)
-        .map(sheet => {
-          try {
-            return Array.from(sheet.cssRules)
-              .map(rule => rule.cssText)
-              .join('\n');
-          } catch (e) {
-            // Skip external stylesheets
-            return '';
-          }
-        })
-        .join('\n');
-
-      // Create a complete HTML document with styles
-      const content = `
-        <html>
-          <head>
-            <style>${styles}</style>
-          </head>
-          <body style="margin:0;padding:0;">
-            ${element.outerHTML}
-          </body>
-        </html>
-      `;
-
-      // Call our API endpoint
-      const response = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ html: content }),
-      });
-
-      if (!response.ok) throw new Error('Failed to generate PDF');
-
-      // Get the PDF blob
-      const blob = await response.blob();
-
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `survival_resume_${identity.name.replace(/\s+/g, '_')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Failed to generate PDF:', error);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -102,13 +34,12 @@ export default function ReviewStep() {
           ← Back to Skills
         </button>
         
-        {FEATURE_FLAGS.ENABLE_PDF_DOWNLOAD && (
+        {FEATURE_FLAGS.ENABLE_RESIDUAL_REPORT && (
           <button
-            onClick={handleDownload}
-            disabled={isDownloading}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-lg shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+            onClick={() => router.push('/wizard/report')}
+            className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
           >
-            {isDownloading ? 'Generating PDF...' : 'Download Resume as PDF'}
+            Assess Residual Selfhood
           </button>
         )}
       </div>
