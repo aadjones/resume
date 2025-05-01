@@ -45,23 +45,26 @@ export async function POST(req: Request) {
     // 6) Compute uniform scale so nothing ever overflows
     const scale = Math.min(1, maxPxW / contentW, maxPxH / contentH);
 
-    // 7) Inject that scale into your resume container
+    // 7) Set the page size to exactly Letter size
+    await page.setViewport({
+      width: maxPxW,
+      height: maxPxH,
+      deviceScaleFactor: 2
+    });
+
+    // 8) Apply scaling to the content
     await page.evaluate((s) => {
       const el = document.getElementById('resume-preview-content')!;
       el.style.transformOrigin = 'top left';
-      el.style.transform       = `scale(${s})`;
+      el.style.transform = `scale(${s})`;
     }, scale);
 
-    // 8) Convert scaled px → inches for page.pdf
-    const pdfWidthIn  = (contentW * scale) / 96;
-    const pdfHeightIn = (contentH * scale) / 96;
-
-    // 9) Finally, render a ONE-PAGE PDF at exactly that size
+    // 9) Generate PDF with exact Letter dimensions
     const pdfBuffer = await page.pdf({
       printBackground: true,
-      width:           `${pdfWidthIn}in`,
-      height:          `${pdfHeightIn}in`,
-      margin:          { top: '0in', right: '0in', bottom: '0in', left: '0in' }
+      width: '8.5in',
+      height: '11in',
+      margin: { top: '0in', right: '0in', bottom: '0in', left: '0in' }
     });
 
     await browser.close();

@@ -10,15 +10,14 @@ export default function FinalPreview() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-8">
       <div 
+        id="resume-preview-content"
         className="bg-white mx-auto shadow-lg border border-gray-200" 
         style={{
           width: '8.5in',
-          height: '11in',
           padding: '0.75in',
           boxSizing: 'border-box',
           fontSize: '11pt',
-          lineHeight: '1.3',
-          overflow: 'hidden'
+          lineHeight: '1.3'
         }}
       >
         {/* HEADER */}
