@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useWizard } from '../context/WizardContext';
+import FormLayout from './FormLayout';
 import { survivalPhrases } from '../data/survival-phrases';
 import { BUTTON_STYLES, BUTTON_TEXT, BUTTON_TOOLTIPS } from '../constants/ui-strings';
 
@@ -79,7 +80,7 @@ export default function SkillsForm() {
   };
 
   return (
-    <div className="relative min-h-full pb-20 pr-12">
+    <FormLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-start mb-8">
           <div>
@@ -136,6 +137,6 @@ export default function SkillsForm() {
           </button>
         </div>
       </div>
-    </div>
+    </FormLayout>
   );
 } 

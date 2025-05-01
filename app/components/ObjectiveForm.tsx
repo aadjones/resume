@@ -2,7 +2,7 @@
 
 import { useWizard } from '../context/WizardContext';
 import { survivalPhrases } from '../data/survival-phrases';
-import { BUTTON_STYLES } from '../constants/ui-strings';
+import { BUTTON_STYLES, BUTTON_TEXT } from '../constants/ui-strings';
 
 export default function ObjectiveForm() {
   const { content, setContent, industry } = useWizard();
@@ -37,7 +37,7 @@ export default function ObjectiveForm() {
               onClick={handleAutofill}
               className={BUTTON_STYLES.ACTION}
             >
-              Autofill
+              {BUTTON_TEXT.AUTO_FILL}
             </button>
           </div>
         </div>

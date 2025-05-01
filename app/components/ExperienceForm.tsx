@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useWizard } from '../context/WizardContext';
+import FormLayout from './FormLayout';
 import type { ExperienceEntry } from '../context/WizardContext';
 import { BUTTON_TEXT, ERROR_MESSAGES, BUTTON_STYLES, BUTTON_TOOLTIPS } from '../constants/ui-strings';
 import { survivalPhrases, companyNames, jobTitles, dateRanges, locations } from '../data/survival-phrases';
@@ -212,7 +213,7 @@ export default function ExperienceForm() {
 
   // ──────── render ─────────
   return (
-    <div className="relative min-h-full pb-20">
+    <FormLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold mb-1">Experience</h1>
@@ -588,6 +589,6 @@ export default function ExperienceForm() {
           Continue to Skills →
         </button>
       </div>
-    </div>
+    </FormLayout>
   );
 }
