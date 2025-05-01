@@ -1,0 +1,23 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "window",
+        "message": "Use dynamic import for browser-only code. Example: import('module').then(module => ...)"
+      },
+      {
+        "name": "self",
+        "message": "Use dynamic import for browser-only code. Example: import('module').then(module => ...)"
+      }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "ImportDeclaration[source.value='html2pdf.js']",
+        "message": "Use dynamic import for browser-only libraries. Example: import('html2pdf.js').then(module => ...)"
+      }
+    ]
+  }
+} 
