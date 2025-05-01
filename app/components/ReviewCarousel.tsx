@@ -55,9 +55,9 @@ const ReviewCard = ({ review }: { review: Review }) => (
 
 export default function ReviewCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
+    align: 'center',
+    slidesToScroll: 1,
     containScroll: 'trimSnaps',
-    dragFree: true,
   });
 
   const scrollPrev = useCallback(() => {
@@ -77,7 +77,7 @@ export default function ReviewCarousel() {
             {reviews.map((review, index) => (
               <div
                 key={index}
-                className="flex-[0_0_90%] min-w-0 pl-4 sm:flex-[0_0_45%] md:flex-[0_0_40%] h-full"
+                className="flex-[0_0_100%] pl-4 h-full"
               >
                 <div className="mr-4 h-full">
                   <ReviewCard review={review} />
