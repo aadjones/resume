@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface FormLayoutProps {
   children: ReactNode;
@@ -12,4 +12,4 @@ export default function FormLayout({ children }: FormLayoutProps) {
       </div>
     </div>
   );
-} 
+}

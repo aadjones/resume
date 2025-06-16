@@ -27,8 +27,9 @@ body {
     margin: 0;
   }
   /* hide everything you don't want printed */
-  button, .no-print { 
-    display: none !important; 
+  button,
+  .no-print {
+    display: none !important;
   }
 
   /* scale the content to fit the page box exactly */
@@ -37,4 +38,4 @@ body {
     /* we'll override this from Puppeteer */
     transform: scale(1);
   }
-} 
+}

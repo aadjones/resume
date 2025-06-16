@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import PersonalForm from '../../components/PersonalForm';
-import WizardPageLayout from '../../components/WizardPageLayout';
+import PersonalForm from "../../components/PersonalForm";
+import WizardPageLayout from "../../components/WizardPageLayout";
 
 export default function ProfileStep() {
   return (
@@ -13,4 +13,4 @@ export default function ProfileStep() {
       <PersonalForm />
     </WizardPageLayout>
   );
-} 
+}

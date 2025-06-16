@@ -4,4 +4,4 @@ export const FEATURE_FLAGS = {
   ENABLE_RESIDUAL_REPORT: true, // Feature flag for the Residual Selfhood Report
 } as const;
 
-export type FeatureFlag = keyof typeof FEATURE_FLAGS; 
+export type FeatureFlag = keyof typeof FEATURE_FLAGS;

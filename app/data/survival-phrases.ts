@@ -104,7 +104,7 @@ export const survivalPhrases: Industries = {
       "Technical Bankruptcy Navigation",
       "Documentation Deficit Management",
       "Velocity Metric Manipulation",
-    ]
+    ],
   },
   service: {
     objective: [
@@ -159,8 +159,8 @@ export const survivalPhrases: Industries = {
       "Strategic Understaffing Navigation",
       "Uncompensated Responsibility Acceptance",
       "Peak-Volume Survival Tactics",
-      "Multi-Role Coverage Operations"
-    ]
+      "Multi-Role Coverage Operations",
+    ],
   },
   healthcare: {
     objective: [
@@ -220,14 +220,17 @@ export const survivalPhrases: Industries = {
       "Regulatory Audit Survival",
       "Documentation Backlog Management",
       "Patient Satisfaction Theater",
-    ]
-  }
+    ],
+  },
 } as const;
 
 export type Industry = keyof typeof survivalPhrases;
 export type PhraseCategory = keyof IndustryContent;
 
-export function getRandomPhrase(industry: Industry, category: PhraseCategory): string {
+export function getRandomPhrase(
+  industry: Industry,
+  category: PhraseCategory,
+): string {
   const phrases = survivalPhrases[industry][category];
   if (phrases.length === 0) {
     throw new Error(`No phrases available for ${industry} ${category}`);
@@ -236,20 +239,24 @@ export function getRandomPhrase(industry: Industry, category: PhraseCategory): s
   return phrases[randomIndex];
 }
 
-export function getRandomPhrases(industry: Industry, category: PhraseCategory, count: number): string[] {
+export function getRandomPhrases(
+  industry: Industry,
+  category: PhraseCategory,
+  count: number,
+): string[] {
   const phrases = [...survivalPhrases[industry][category]];
   if (phrases.length === 0) {
     throw new Error(`No phrases available for ${industry} ${category}`);
   }
   const result: string[] = [];
-  
+
   const actualCount = Math.min(count, phrases.length);
   for (let i = 0; i < actualCount; i++) {
     const randomIndex = Math.floor(Math.random() * phrases.length);
     result.push(phrases[randomIndex]);
     phrases.splice(randomIndex, 1);
   }
-  
+
   return result;
 }
 
@@ -264,7 +271,7 @@ export const companyNames = {
     "MetricShift Technologies",
     "DeliverableAI",
     "Pivot Dynamics",
-    "StakeholderTech"
+    "StakeholderTech",
   ],
   service: [
     "Marriott International",
@@ -276,7 +283,7 @@ export const companyNames = {
     "FedEx Corporation",
     "UPS",
     "DHL Express",
-    "Accenture"
+    "Accenture",
   ],
   healthcare: [
     "Mayo Clinic",
@@ -288,8 +295,8 @@ export const companyNames = {
     "Pfizer",
     "Merck",
     "Eli Lilly",
-    "Abbott Laboratories"
-  ]
+    "Abbott Laboratories",
+  ],
 } as const;
 
 export const jobTitles = {
@@ -303,7 +310,7 @@ export const jobTitles = {
     "Technical Debt Concealment Engineer",
     "Sprint Velocity Architect",
     "Metric Surface Engineer",
-    "Deadline Management Specialist"
+    "Deadline Management Specialist",
   ],
   service: [
     "Customer Satisfaction Architect",
@@ -315,7 +322,7 @@ export const jobTitles = {
     "Conflict Resolution Specialist",
     "Resource Distribution Manager",
     "Customer Experience Architect",
-    "Satisfaction Metrics Lead"
+    "Satisfaction Metrics Lead",
   ],
   healthcare: [
     "Patient Throughput Specialist",
@@ -327,8 +334,8 @@ export const jobTitles = {
     "Quality Metrics Lead",
     "Patient Experience Architect",
     "Documentation Flow Manager",
-    "Compliance Strategy Director"
-  ]
+    "Compliance Strategy Director",
+  ],
 } as const;
 
 export const dateRanges = [
@@ -350,7 +357,7 @@ export const dateRanges = [
   "The Before Times – The Great Resignation",
   // Shorter/weirder ones
   "That One Summer",
-  "My Awkward Phase"
+  "My Awkward Phase",
 ] as const;
 
 export const locations = {
@@ -377,7 +384,7 @@ export const locations = {
     "Digital Workspace, Online",
     "The Internet, WWW",
     "Remote Team, Global",
-    "Digital Frontier, Cyberspace"
+    "Digital Frontier, Cyberspace",
   ],
   service: [
     // Real cities
@@ -401,7 +408,7 @@ export const locations = {
     "The Front Lines, NV",
     "The Service Industry, LA",
     "The Hospitality Zone, TN",
-    "The Retail Wasteland, CA"
+    "The Retail Wasteland, CA",
   ],
   healthcare: [
     // Real cities
@@ -425,6 +432,6 @@ export const locations = {
     "The Ward, TN",
     "The Lab, PA",
     "The Pharmacy, NC",
-    "The Morgue, MO"
-  ]
-} as const; 
+    "The Morgue, MO",
+  ],
+} as const;

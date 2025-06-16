@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import ExperienceForm from '../../components/ExperienceForm';
-import WizardPageLayout from '../../components/WizardPageLayout';
+import ExperienceForm from "../../components/ExperienceForm";
+import WizardPageLayout from "../../components/WizardPageLayout";
 
 export default function ExperienceStep() {
   return (
@@ -13,4 +13,4 @@ export default function ExperienceStep() {
       <ExperienceForm />
     </WizardPageLayout>
   );
-} 
+}

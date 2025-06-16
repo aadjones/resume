@@ -1,52 +1,68 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useWizard } from '../context/WizardContext';
-import FormLayout from './FormLayout';
-import type { ExperienceEntry } from '../context/WizardContext';
-import { BUTTON_TEXT, ERROR_MESSAGES, BUTTON_STYLES, BUTTON_TOOLTIPS, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
-import { survivalPhrases, companyNames, jobTitles, dateRanges, locations } from '../data/survival-phrases';
-import { FEATURE_FLAGS } from '../config/feature-flags';
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useWizard } from "../context/WizardContext";
+import FormLayout from "./FormLayout";
+import type { ExperienceEntry } from "../context/WizardContext";
+import {
+  BUTTON_TEXT,
+  ERROR_MESSAGES,
+  BUTTON_STYLES,
+  BUTTON_TOOLTIPS,
+  DISTORTION_MULTIPLIERS,
+} from "../constants/ui-strings";
+import {
+  survivalPhrases,
+  companyNames,
+  jobTitles,
+  dateRanges,
+  locations,
+} from "../data/survival-phrases";
+import { FEATURE_FLAGS } from "../config/feature-flags";
 
 // Add loading state tracking
 type LoadingState = {
   jobIndex: number;
   respIndex: number;
-  type: 'autofill' | 'rewrite' | 'company' | 'title' | 'dateRange';
+  type: "autofill" | "rewrite" | "company" | "title" | "dateRange";
 } | null;
 
 const emptyJob: ExperienceEntry = {
-  company: '',
-  title: '',
-  dateRange: '',
-  location: '',
-  responsibilities: ['']
+  company: "",
+  title: "",
+  dateRange: "",
+  location: "",
+  responsibilities: [""],
 };
 
 export default function ExperienceForm() {
   const router = useRouter();
-  const { content, setContent, industry, incrementDistortionIndex } = useWizard();
+  const { content, setContent, industry, incrementDistortionIndex } =
+    useWizard();
   const [loadingState, setLoadingState] = useState<LoadingState>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Track used phrases to avoid duplicates
   const [usedPhrases, setUsedPhrases] = useState({
     companies: new Set<string>(),
     titles: new Set<string>(),
     locations: new Set<string>(),
-    responsibilities: new Set<string>()
+    responsibilities: new Set<string>(),
   });
 
   // Helper function to get a random unused item from an array
-  const getRandomUnused = useCallback((items: readonly string[], usedSet: Set<string>): string | null => {
-    const unusedItems = items.filter(item => !usedSet.has(item));
-    if (unusedItems.length === 0) return null;
-    
-    const randomIndex = Math.floor(Math.random() * unusedItems.length);
-    const selectedItem = unusedItems[randomIndex];
-    return selectedItem;
-  }, []);
+  const getRandomUnused = useCallback(
+    (items: readonly string[], usedSet: Set<string>): string | null => {
+      const unusedItems = items.filter((item) => !usedSet.has(item));
+      if (unusedItems.length === 0) return null;
+
+      const randomIndex = Math.floor(Math.random() * unusedItems.length);
+      const selectedItem = unusedItems[randomIndex];
+      return selectedItem;
+    },
+    [],
+  );
 
   const handleAutofillJob = (jobIndex: number) => {
     // Get random unused data for this job entry
@@ -55,51 +71,70 @@ export default function ExperienceForm() {
     const industryLocations = locations[industry];
     const responsibilities = survivalPhrases[industry].experience;
 
-    const randomCompany = getRandomUnused(companies, usedPhrases.companies) ?? 
+    const randomCompany =
+      getRandomUnused(companies, usedPhrases.companies) ??
       companies[Math.floor(Math.random() * companies.length)];
-    
-    const randomTitle = getRandomUnused(titles, usedPhrases.titles) ?? 
+
+    const randomTitle =
+      getRandomUnused(titles, usedPhrases.titles) ??
       titles[Math.floor(Math.random() * titles.length)];
-    
-    const randomLocation = getRandomUnused(industryLocations, usedPhrases.locations) ?? 
+
+    const randomLocation =
+      getRandomUnused(industryLocations, usedPhrases.locations) ??
       industryLocations[Math.floor(Math.random() * industryLocations.length)];
-    
+
     // Use jobIndex to determine if we should allow "Present" in date range
-    const validDateRanges = jobIndex === 0 
-      ? dateRanges 
-      : dateRanges.filter(range => !range.endsWith('Present'));
-    const randomDateRange = validDateRanges[Math.floor(Math.random() * validDateRanges.length)];
+    const validDateRanges =
+      jobIndex === 0
+        ? dateRanges
+        : dateRanges.filter((range) => !range.endsWith("Present"));
+    const randomDateRange =
+      validDateRanges[Math.floor(Math.random() * validDateRanges.length)];
 
     // Generate unique random responsibilities
     const localUsedResponsibilities = new Set<string>();
     const getUniqueResponsibility = (): string => {
-      const unusedResponsibilities = responsibilities.filter(resp => !localUsedResponsibilities.has(resp));
+      const unusedResponsibilities = responsibilities.filter(
+        (resp) => !localUsedResponsibilities.has(resp),
+      );
       if (unusedResponsibilities.length === 0) {
         // If we've used all responsibilities, reset the used set
         localUsedResponsibilities.clear();
-        return responsibilities[Math.floor(Math.random() * responsibilities.length)];
+        return responsibilities[
+          Math.floor(Math.random() * responsibilities.length)
+        ];
       }
-      const resp = unusedResponsibilities[Math.floor(Math.random() * unusedResponsibilities.length)];
+      const resp =
+        unusedResponsibilities[
+          Math.floor(Math.random() * unusedResponsibilities.length)
+        ];
       localUsedResponsibilities.add(resp);
       return resp;
     };
 
     // If there are fewer than 3 responsibilities, create exactly 3
-    const currentResponsibilities = content.experience[jobIndex].responsibilities;
-    const updatedResponsibilities = currentResponsibilities.length < 3
-      ? Array(3).fill('').map(() => getUniqueResponsibility())
-      : currentResponsibilities.map(() => getUniqueResponsibility());
+    const currentResponsibilities =
+      content.experience[jobIndex].responsibilities;
+    const updatedResponsibilities =
+      currentResponsibilities.length < 3
+        ? Array(3)
+            .fill("")
+            .map(() => getUniqueResponsibility())
+        : currentResponsibilities.map(() => getUniqueResponsibility());
 
     // Update used phrases
-    setUsedPhrases(prev => ({
+    setUsedPhrases((prev) => ({
       companies: new Set([...prev.companies, randomCompany]),
       titles: new Set([...prev.titles, randomTitle]),
       locations: new Set([...prev.locations, randomLocation]),
-      responsibilities: new Set([...prev.responsibilities, ...updatedResponsibilities])
+      responsibilities: new Set([
+        ...prev.responsibilities,
+        ...updatedResponsibilities,
+      ]),
     }));
 
     // Update the specific job entry
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
       experience: prev.experience.map((entry, idx) =>
         idx === jobIndex
@@ -111,7 +146,7 @@ export default function ExperienceForm() {
               location: randomLocation,
               responsibilities: updatedResponsibilities,
             }
-          : entry
+          : entry,
       ),
     }));
 
@@ -128,43 +163,47 @@ export default function ExperienceForm() {
       companies: new Set<string>(),
       titles: new Set<string>(),
       locations: new Set<string>(),
-      responsibilities: new Set<string>()
+      responsibilities: new Set<string>(),
     });
   }, [industry]);
 
   // ──────── initialize exactly one empty job on first mount ─────────
   useEffect(() => {
     if (!content.experience || content.experience.length === 0) {
-      setContent(prev => ({
+      setContent((prev) => ({
         ...prev,
-        experience: [{ ...emptyJob }]
+        experience: [{ ...emptyJob }],
       }));
     }
   }, [content.experience, setContent]);
 
   // ──────── handlers ─────────
   const addNewJob = () => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      experience: [...prev.experience, { ...emptyJob }]
+      experience: [...prev.experience, { ...emptyJob }],
     }));
   };
 
   const updateEntry = (
     index: number,
-    field: keyof Omit<ExperienceEntry, 'responsibilities'>,
-    value: string
+    field: keyof Omit<ExperienceEntry, "responsibilities">,
+    value: string,
   ) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      experience: prev.experience.map((entry, i) => 
-        i === index ? { ...entry, [field]: value } : entry
-      )
+      experience: prev.experience.map((entry, i) =>
+        i === index ? { ...entry, [field]: value } : entry,
+      ),
     }));
   };
 
-  const updateResponsibility = (jobIndex: number, respIndex: number, value: string) => {
-    setContent(prev => ({
+  const updateResponsibility = (
+    jobIndex: number,
+    respIndex: number,
+    value: string,
+  ) => {
+    setContent((prev) => ({
       ...prev,
       experience: prev.experience.map((entry, i) => {
         if (i === jobIndex) {
@@ -173,44 +212,46 @@ export default function ExperienceForm() {
           return { ...entry, responsibilities: newResponsibilities };
         }
         return entry;
-      })
+      }),
     }));
   };
 
   const addResponsibility = (jobIndex: number) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
       experience: prev.experience.map((entry, i) => {
         if (i === jobIndex) {
           return {
             ...entry,
-            responsibilities: [...entry.responsibilities, '']
+            responsibilities: [...entry.responsibilities, ""],
           };
         }
         return entry;
-      })
+      }),
     }));
   };
 
   const removeResponsibility = (jobIndex: number, respIndex: number) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
       experience: prev.experience.map((entry, i) => {
         if (i === jobIndex) {
           return {
             ...entry,
-            responsibilities: entry.responsibilities.filter((_, idx) => idx !== respIndex)
+            responsibilities: entry.responsibilities.filter(
+              (_, idx) => idx !== respIndex,
+            ),
           };
         }
         return entry;
-      })
+      }),
     }));
   };
 
   const removeJob = (index: number) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      experience: prev.experience.filter((_, i) => i !== index)
+      experience: prev.experience.filter((_, i) => i !== index),
     }));
   };
 
@@ -220,7 +261,9 @@ export default function ExperienceForm() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold mb-1">Experience</h1>
-          <p className="text-gray-600 mb-6">Add your work history and responsibilities</p>
+          <p className="text-gray-600 mb-6">
+            Add your work history and responsibilities
+          </p>
         </div>
 
         <div className="space-y-6">
@@ -261,68 +304,105 @@ export default function ExperienceForm() {
                       <input
                         type="text"
                         value={entry.company}
-                        onChange={e => {
-                          updateEntry(jobIndex, 'company', e.target.value);
+                        onChange={(e) => {
+                          updateEntry(jobIndex, "company", e.target.value);
                           setError(null);
                         }}
                         placeholder="Company Name"
                         className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        disabled={loadingState?.jobIndex === jobIndex && loadingState?.type === 'company'}
+                        disabled={
+                          loadingState?.jobIndex === jobIndex &&
+                          loadingState?.type === "company"
+                        }
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
                             const companies = companyNames[industry];
-                            const newValue = getRandomUnused(companies, usedPhrases.companies) ?? 
-                              companies[Math.floor(Math.random() * companies.length)];
-                            updateEntry(jobIndex, 'company', newValue);
-                            setUsedPhrases(prev => ({
+                            const newValue =
+                              getRandomUnused(
+                                companies,
+                                usedPhrases.companies,
+                              ) ??
+                              companies[
+                                Math.floor(Math.random() * companies.length)
+                              ];
+                            updateEntry(jobIndex, "company", newValue);
+                            setUsedPhrases((prev) => ({
                               ...prev,
-                              companies: new Set([...prev.companies, newValue])
+                              companies: new Set([...prev.companies, newValue]),
                             }));
                             // Increment distortion index for individual field autofill
-                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                            incrementDistortionIndex(
+                              DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                            );
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
-                          className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
+                          className={
+                            loadingState !== null
+                              ? BUTTON_STYLES.ACTION_DISABLED
+                              : BUTTON_STYLES.ACTION
+                          }
                         >
                           {BUTTON_TEXT.AUTO_FILL}
                         </button>
-                        
-                        {entry.company.trim() !== '' && FEATURE_FLAGS.ENABLE_RECAST && (
-                          <button
-                            onClick={async () => {
-                              try {
-                                setLoadingState({ jobIndex, respIndex: -1, type: 'rewrite' });
-                                setError(null);
-                                const response = await fetch('/api/rewrite-for-survival', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    text: entry.company,
-                                    industry
-                                  })
-                                });
-                                
-                                if (!response.ok) throw new Error('Rewrite failed');
-                                
-                                const { rewrittenText } = await response.json();
-                                updateEntry(jobIndex, 'company', rewrittenText);
-                              } catch (err) {
-                                setError(ERROR_MESSAGES.REWRITE_FAILED);
-                              } finally {
-                                setLoadingState(null);
+
+                        {entry.company.trim() !== "" &&
+                          FEATURE_FLAGS.ENABLE_RECAST && (
+                            <button
+                              onClick={async () => {
+                                try {
+                                  setLoadingState({
+                                    jobIndex,
+                                    respIndex: -1,
+                                    type: "rewrite",
+                                  });
+                                  setError(null);
+                                  const response = await fetch(
+                                    "/api/rewrite-for-survival",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        text: entry.company,
+                                        industry,
+                                      }),
+                                    },
+                                  );
+
+                                  if (!response.ok)
+                                    throw new Error("Rewrite failed");
+
+                                  const { rewrittenText } =
+                                    await response.json();
+                                  updateEntry(
+                                    jobIndex,
+                                    "company",
+                                    rewrittenText,
+                                  );
+                                } catch (err) {
+                                  setError(ERROR_MESSAGES.REWRITE_FAILED);
+                                } finally {
+                                  setLoadingState(null);
+                                }
+                              }}
+                              disabled={loadingState !== null}
+                              title={BUTTON_TOOLTIPS.REWRITE}
+                              className={
+                                loadingState !== null
+                                  ? BUTTON_STYLES.ACTION_DISABLED
+                                  : BUTTON_STYLES.ACTION
                               }
-                            }}
-                            disabled={loadingState !== null}
-                            title={BUTTON_TOOLTIPS.REWRITE}
-                            className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
-                          >
-                            {loadingState?.jobIndex === jobIndex && 
-                             loadingState?.type === 'rewrite' ? BUTTON_TEXT.LOADING : BUTTON_TEXT.REWRITE}
-                          </button>
-                        )}
+                            >
+                              {loadingState?.jobIndex === jobIndex &&
+                              loadingState?.type === "rewrite"
+                                ? BUTTON_TEXT.LOADING
+                                : BUTTON_TEXT.REWRITE}
+                            </button>
+                          )}
                       </div>
                     </div>
                   </label>
@@ -334,68 +414,96 @@ export default function ExperienceForm() {
                       <input
                         type="text"
                         value={entry.title}
-                        onChange={e => {
-                          updateEntry(jobIndex, 'title', e.target.value);
+                        onChange={(e) => {
+                          updateEntry(jobIndex, "title", e.target.value);
                           setError(null);
                         }}
                         placeholder="Job Title"
                         className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        disabled={loadingState?.jobIndex === jobIndex && loadingState?.type === 'title'}
+                        disabled={
+                          loadingState?.jobIndex === jobIndex &&
+                          loadingState?.type === "title"
+                        }
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
                             const titles = jobTitles[industry];
-                            const newValue = getRandomUnused(titles, usedPhrases.titles) ?? 
+                            const newValue =
+                              getRandomUnused(titles, usedPhrases.titles) ??
                               titles[Math.floor(Math.random() * titles.length)];
-                            updateEntry(jobIndex, 'title', newValue);
-                            setUsedPhrases(prev => ({
+                            updateEntry(jobIndex, "title", newValue);
+                            setUsedPhrases((prev) => ({
                               ...prev,
-                              titles: new Set([...prev.titles, newValue])
+                              titles: new Set([...prev.titles, newValue]),
                             }));
                             // Increment distortion index for individual field autofill
-                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                            incrementDistortionIndex(
+                              DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                            );
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
-                          className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
+                          className={
+                            loadingState !== null
+                              ? BUTTON_STYLES.ACTION_DISABLED
+                              : BUTTON_STYLES.ACTION
+                          }
                         >
                           {BUTTON_TEXT.AUTO_FILL}
                         </button>
-                        
-                        {entry.title.trim() !== '' && FEATURE_FLAGS.ENABLE_RECAST && (
-                          <button
-                            onClick={async () => {
-                              try {
-                                setLoadingState({ jobIndex, respIndex: -1, type: 'rewrite' });
-                                setError(null);
-                                const response = await fetch('/api/rewrite-for-survival', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    text: entry.title,
-                                    industry
-                                  })
-                                });
-                                
-                                if (!response.ok) throw new Error('Rewrite failed');
-                                
-                                const { rewrittenText } = await response.json();
-                                updateEntry(jobIndex, 'title', rewrittenText);
-                              } catch (err) {
-                                setError(ERROR_MESSAGES.REWRITE_FAILED);
-                              } finally {
-                                setLoadingState(null);
+
+                        {entry.title.trim() !== "" &&
+                          FEATURE_FLAGS.ENABLE_RECAST && (
+                            <button
+                              onClick={async () => {
+                                try {
+                                  setLoadingState({
+                                    jobIndex,
+                                    respIndex: -1,
+                                    type: "rewrite",
+                                  });
+                                  setError(null);
+                                  const response = await fetch(
+                                    "/api/rewrite-for-survival",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        text: entry.title,
+                                        industry,
+                                      }),
+                                    },
+                                  );
+
+                                  if (!response.ok)
+                                    throw new Error("Rewrite failed");
+
+                                  const { rewrittenText } =
+                                    await response.json();
+                                  updateEntry(jobIndex, "title", rewrittenText);
+                                } catch (err) {
+                                  setError(ERROR_MESSAGES.REWRITE_FAILED);
+                                } finally {
+                                  setLoadingState(null);
+                                }
+                              }}
+                              disabled={loadingState !== null}
+                              title={BUTTON_TOOLTIPS.REWRITE}
+                              className={
+                                loadingState !== null
+                                  ? BUTTON_STYLES.ACTION_DISABLED
+                                  : BUTTON_STYLES.ACTION
                               }
-                            }}
-                            disabled={loadingState !== null}
-                            title={BUTTON_TOOLTIPS.REWRITE}
-                            className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
-                          >
-                            {loadingState?.jobIndex === jobIndex && 
-                             loadingState?.type === 'rewrite' ? BUTTON_TEXT.LOADING : BUTTON_TEXT.REWRITE}
-                          </button>
-                        )}
+                            >
+                              {loadingState?.jobIndex === jobIndex &&
+                              loadingState?.type === "rewrite"
+                                ? BUTTON_TEXT.LOADING
+                                : BUTTON_TEXT.REWRITE}
+                            </button>
+                          )}
                       </div>
                     </div>
                   </label>
@@ -411,65 +519,104 @@ export default function ExperienceForm() {
                       <input
                         type="text"
                         value={entry.dateRange}
-                        onChange={e => {
-                          updateEntry(jobIndex, 'dateRange', e.target.value);
+                        onChange={(e) => {
+                          updateEntry(jobIndex, "dateRange", e.target.value);
                           setError(null);
                         }}
                         placeholder="e.g., Jan 2020 – Present"
                         className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        disabled={loadingState?.jobIndex === jobIndex && loadingState?.type === 'dateRange'}
+                        disabled={
+                          loadingState?.jobIndex === jobIndex &&
+                          loadingState?.type === "dateRange"
+                        }
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
-                            const validDateRanges = jobIndex === 0 
-                              ? dateRanges 
-                              : dateRanges.filter(range => !range.endsWith('Present'));
-                            const newValue = validDateRanges[Math.floor(Math.random() * validDateRanges.length)];
-                            updateEntry(jobIndex, 'dateRange', newValue);
+                            const validDateRanges =
+                              jobIndex === 0
+                                ? dateRanges
+                                : dateRanges.filter(
+                                    (range) => !range.endsWith("Present"),
+                                  );
+                            const newValue =
+                              validDateRanges[
+                                Math.floor(
+                                  Math.random() * validDateRanges.length,
+                                )
+                              ];
+                            updateEntry(jobIndex, "dateRange", newValue);
                             // Increment distortion index for individual field autofill
-                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                            incrementDistortionIndex(
+                              DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                            );
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
-                          className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
+                          className={
+                            loadingState !== null
+                              ? BUTTON_STYLES.ACTION_DISABLED
+                              : BUTTON_STYLES.ACTION
+                          }
                         >
                           {BUTTON_TEXT.AUTO_FILL}
                         </button>
-                        
-                        {entry.dateRange.trim() !== '' && FEATURE_FLAGS.ENABLE_RECAST && (
-                          <button
-                            onClick={async () => {
-                              try {
-                                setLoadingState({ jobIndex, respIndex: -1, type: 'rewrite' });
-                                setError(null);
-                                const response = await fetch('/api/rewrite-for-survival', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    text: entry.dateRange,
-                                    industry
-                                  })
-                                });
-                                
-                                if (!response.ok) throw new Error('Rewrite failed');
-                                
-                                const { rewrittenText } = await response.json();
-                                updateEntry(jobIndex, 'dateRange', rewrittenText);
-                              } catch (err) {
-                                setError(ERROR_MESSAGES.REWRITE_FAILED);
-                              } finally {
-                                setLoadingState(null);
+
+                        {entry.dateRange.trim() !== "" &&
+                          FEATURE_FLAGS.ENABLE_RECAST && (
+                            <button
+                              onClick={async () => {
+                                try {
+                                  setLoadingState({
+                                    jobIndex,
+                                    respIndex: -1,
+                                    type: "rewrite",
+                                  });
+                                  setError(null);
+                                  const response = await fetch(
+                                    "/api/rewrite-for-survival",
+                                    {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        text: entry.dateRange,
+                                        industry,
+                                      }),
+                                    },
+                                  );
+
+                                  if (!response.ok)
+                                    throw new Error("Rewrite failed");
+
+                                  const { rewrittenText } =
+                                    await response.json();
+                                  updateEntry(
+                                    jobIndex,
+                                    "dateRange",
+                                    rewrittenText,
+                                  );
+                                } catch (err) {
+                                  setError(ERROR_MESSAGES.REWRITE_FAILED);
+                                } finally {
+                                  setLoadingState(null);
+                                }
+                              }}
+                              disabled={loadingState !== null}
+                              title={BUTTON_TOOLTIPS.REWRITE}
+                              className={
+                                loadingState !== null
+                                  ? BUTTON_STYLES.ACTION_DISABLED
+                                  : BUTTON_STYLES.ACTION
                               }
-                            }}
-                            disabled={loadingState !== null}
-                            title={BUTTON_TOOLTIPS.REWRITE}
-                            className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
-                          >
-                            {loadingState?.jobIndex === jobIndex && 
-                             loadingState?.type === 'rewrite' ? BUTTON_TEXT.LOADING : BUTTON_TEXT.REWRITE}
-                          </button>
-                        )}
+                            >
+                              {loadingState?.jobIndex === jobIndex &&
+                              loadingState?.type === "rewrite"
+                                ? BUTTON_TEXT.LOADING
+                                : BUTTON_TEXT.REWRITE}
+                            </button>
+                          )}
                       </div>
                     </div>
                   </label>
@@ -481,8 +628,8 @@ export default function ExperienceForm() {
                       <input
                         type="text"
                         value={entry.location}
-                        onChange={e =>
-                          updateEntry(jobIndex, 'location', e.target.value)
+                        onChange={(e) =>
+                          updateEntry(jobIndex, "location", e.target.value)
                         }
                         placeholder="City, ST"
                         className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -491,19 +638,33 @@ export default function ExperienceForm() {
                         <button
                           onClick={() => {
                             const industryLocations = locations[industry];
-                            const newValue = getRandomUnused(industryLocations, usedPhrases.locations) ?? 
-                              industryLocations[Math.floor(Math.random() * industryLocations.length)];
-                            updateEntry(jobIndex, 'location', newValue);
-                            setUsedPhrases(prev => ({
+                            const newValue =
+                              getRandomUnused(
+                                industryLocations,
+                                usedPhrases.locations,
+                              ) ??
+                              industryLocations[
+                                Math.floor(
+                                  Math.random() * industryLocations.length,
+                                )
+                              ];
+                            updateEntry(jobIndex, "location", newValue);
+                            setUsedPhrases((prev) => ({
                               ...prev,
-                              locations: new Set([...prev.locations, newValue])
+                              locations: new Set([...prev.locations, newValue]),
                             }));
                             // Increment distortion index for individual field autofill
-                            incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                            incrementDistortionIndex(
+                              DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                            );
                           }}
                           disabled={loadingState !== null}
                           title={BUTTON_TOOLTIPS.AUTO_FILL}
-                          className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
+                          className={
+                            loadingState !== null
+                              ? BUTTON_STYLES.ACTION_DISABLED
+                              : BUTTON_STYLES.ACTION
+                          }
                         >
                           {BUTTON_TEXT.AUTO_FILL}
                         </button>
@@ -524,44 +685,59 @@ export default function ExperienceForm() {
                       <input
                         type="text"
                         value={resp}
-                        onChange={e => {
-                          updateResponsibility(jobIndex, respIndex, e.target.value);
+                        onChange={(e) => {
+                          updateResponsibility(
+                            jobIndex,
+                            respIndex,
+                            e.target.value,
+                          );
                           setError(null);
                         }}
                         placeholder="Enter a responsibility"
                         className="flex-1 px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                        disabled={loadingState?.jobIndex === jobIndex && loadingState?.respIndex === respIndex}
+                        disabled={
+                          loadingState?.jobIndex === jobIndex &&
+                          loadingState?.respIndex === respIndex
+                        }
                       />
                       {entry.responsibilities.length > 1 && (
                         <button
-                          onClick={() => removeResponsibility(jobIndex, respIndex)}
+                          onClick={() =>
+                            removeResponsibility(jobIndex, respIndex)
+                          }
                           className={BUTTON_STYLES.REMOVE}
                         >
                           Remove
                         </button>
                       )}
                     </div>
-                    
+
                     <div className="flex gap-2 ml-1">
                       <button
                         onClick={() => {
                           const phrases = survivalPhrases[industry].experience;
-                          const newValue = phrases[Math.floor(Math.random() * phrases.length)];
+                          const newValue =
+                            phrases[Math.floor(Math.random() * phrases.length)];
                           updateResponsibility(jobIndex, respIndex, newValue);
                         }}
                         disabled={loadingState !== null}
                         title={BUTTON_TOOLTIPS.AUTO_FILL}
-                        className={loadingState !== null ? BUTTON_STYLES.ACTION_DISABLED : BUTTON_STYLES.ACTION}
+                        className={
+                          loadingState !== null
+                            ? BUTTON_STYLES.ACTION_DISABLED
+                            : BUTTON_STYLES.ACTION
+                        }
                       >
                         {BUTTON_TEXT.AUTO_FILL}
                       </button>
                     </div>
-                    
+
                     {/* Error message */}
-                    {error && loadingState?.jobIndex === jobIndex && 
-                     loadingState?.respIndex === respIndex && (
-                      <p className="text-sm text-red-500 ml-1">{error}</p>
-                    )}
+                    {error &&
+                      loadingState?.jobIndex === jobIndex &&
+                      loadingState?.respIndex === respIndex && (
+                        <p className="text-sm text-red-500 ml-1">{error}</p>
+                      )}
                   </div>
                 ))}
 
@@ -577,10 +753,7 @@ export default function ExperienceForm() {
         </div>
 
         {/* add-another button */}
-        <button
-          onClick={addNewJob}
-          className={BUTTON_STYLES.ADD}
-        >
+        <button onClick={addNewJob} className={BUTTON_STYLES.ADD}>
           + Add Another Job
         </button>
       </div>

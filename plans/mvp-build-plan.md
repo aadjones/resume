@@ -36,7 +36,7 @@
 
 ---
 
-##  **Phase 3: Core Functionalities**
+## **Phase 3: Core Functionalities**
 
 - [ ] Implement Applicant Header Generator (random number \+ city/email)
 
@@ -79,4 +79,3 @@
 - [ ] Test randomization/variety of Auto-Fill survival phrases
 
 - [ ] Test survival Rewrite quality with real user-typed inputs
-

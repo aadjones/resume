@@ -1,5 +1,5 @@
-export type Industry = 'tech' | 'service' | 'healthcare';
-export type Section = 'objective' | 'experience' | 'skills';
+export type Industry = "tech" | "service" | "healthcare";
+export type Section = "objective" | "experience" | "skills";
 
 const FORMATTING_GUIDES = {
   objective: `
@@ -23,7 +23,7 @@ Format your output using Markdown:
 - One per line
 - No full sentences
 - Highlight late capitalist operational proficiencies
-`
+`,
 };
 
 const ONE_SHOT_EXAMPLES: Record<Industry, Record<Section, string>> = {
@@ -44,7 +44,7 @@ Tactical Scope Absorption
 KPI Surface Manipulation
 Cross-Functional Volatility Navigation
 Resource Deprivation Compensation
-`
+`,
   },
 
   service: {
@@ -64,7 +64,7 @@ Emotional Labor Load-Bearing
 Service Optics Preservation
 Passive Operational Stabilization
 Silent Resource Deficiency Compensation
-`
+`,
   },
 
   healthcare: {
@@ -84,13 +84,18 @@ Compassion Fatigue Modulation
 Operational Continuity Under Resource Scarcity
 Patient Optics Management
 Procedural Adaptation Under Instability
-`
-  }
+`,
+  },
 };
 
-export const SURVIVAL_PROMPTS: Record<Industry, Record<Section, (text: string) => string>> = {
+export const SURVIVAL_PROMPTS: Record<
+  Industry,
+  Record<Section, (text: string) => string>
+> = {
   tech: {
-    objective: (text: string) => `Rewrite the following tech objective realistically for late capitalist work structures.
+    objective: (
+      text: string,
+    ) => `Rewrite the following tech objective realistically for late capitalist work structures.
 Focus on optics management, survival under shifting directives, and compressed deliverable continuity.
 ${FORMATTING_GUIDES.objective}
 
@@ -99,7 +104,9 @@ ${ONE_SHOT_EXAMPLES.tech.objective}
 
 ${text}`,
 
-    experience: (text: string) => `Rewrite the following tech work experience to expose real systemic survival behaviors: optics preservation, deliverable manipulation, volatility absorption.
+    experience: (
+      text: string,
+    ) => `Rewrite the following tech work experience to expose real systemic survival behaviors: optics preservation, deliverable manipulation, volatility absorption.
 ${FORMATTING_GUIDES.experience}
 
 Example of final output:
@@ -107,17 +114,21 @@ ${ONE_SHOT_EXAMPLES.tech.experience}
 
 ${text}`,
 
-    skills: (text: string) => `Rewrite the following tech skills list to highlight tactical proficiencies for survival inside unstable organizations.
+    skills: (
+      text: string,
+    ) => `Rewrite the following tech skills list to highlight tactical proficiencies for survival inside unstable organizations.
 ${FORMATTING_GUIDES.skills}
 
 Example of final output:
 ${ONE_SHOT_EXAMPLES.tech.skills}
 
-${text}`
+${text}`,
   },
 
   service: {
-    objective: (text: string) => `Rewrite the following service industry objective to expose emotional endurance, conflict suppression, and operational optics management.
+    objective: (
+      text: string,
+    ) => `Rewrite the following service industry objective to expose emotional endurance, conflict suppression, and operational optics management.
 ${FORMATTING_GUIDES.objective}
 
 Example of final output:
@@ -125,7 +136,9 @@ ${ONE_SHOT_EXAMPLES.service.objective}
 
 ${text}`,
 
-    experience: (text: string) => `Rewrite the following service work experience to highlight emotional labor, conflict de-escalation, and optics management under systemic instability.
+    experience: (
+      text: string,
+    ) => `Rewrite the following service work experience to highlight emotional labor, conflict de-escalation, and optics management under systemic instability.
 ${FORMATTING_GUIDES.experience}
 
 Example of final output:
@@ -133,17 +146,21 @@ ${ONE_SHOT_EXAMPLES.service.experience}
 
 ${text}`,
 
-    skills: (text: string) => `Rewrite the following service skills list to highlight tactical survival behaviors under chronic customer-facing pressures.
+    skills: (
+      text: string,
+    ) => `Rewrite the following service skills list to highlight tactical survival behaviors under chronic customer-facing pressures.
 ${FORMATTING_GUIDES.skills}
 
 Example of final output:
 ${ONE_SHOT_EXAMPLES.service.skills}
 
-${text}`
+${text}`,
   },
 
   healthcare: {
-    objective: (text: string) => `Rewrite the following healthcare objective to reflect operational survival under bureaucratic instability and resource scarcity.
+    objective: (
+      text: string,
+    ) => `Rewrite the following healthcare objective to reflect operational survival under bureaucratic instability and resource scarcity.
 ${FORMATTING_GUIDES.objective}
 
 Example of final output:
@@ -151,7 +168,9 @@ ${ONE_SHOT_EXAMPLES.healthcare.objective}
 
 ${text}`,
 
-    experience: (text: string) => `Rewrite the following healthcare clinical experience to highlight bureaucratic navigation, optics management, and operational survival tactics.
+    experience: (
+      text: string,
+    ) => `Rewrite the following healthcare clinical experience to highlight bureaucratic navigation, optics management, and operational survival tactics.
 ${FORMATTING_GUIDES.experience}
 
 Example of final output:
@@ -159,14 +178,16 @@ ${ONE_SHOT_EXAMPLES.healthcare.experience}
 
 ${text}`,
 
-    skills: (text: string) => `Rewrite the following healthcare skills list to surface tactical proficiencies necessary for survival in late-stage institutional care environments.
+    skills: (
+      text: string,
+    ) => `Rewrite the following healthcare skills list to surface tactical proficiencies necessary for survival in late-stage institutional care environments.
 ${FORMATTING_GUIDES.skills}
 
 Example of final output:
 ${ONE_SHOT_EXAMPLES.healthcare.skills}
 
-${text}`
-  }
+${text}`,
+  },
 };
 
 export const SURVIVALIST_SYSTEM_PROMPT = `You are a survivalist resume translator.

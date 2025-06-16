@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import ReviewCarousel from './components/ReviewCarousel';
+import Link from "next/link";
+import ReviewCarousel from "./components/ReviewCarousel";
 
 export default function Home() {
   return (
@@ -8,13 +8,14 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900">
-            Autofill!   
+            Autofill!
           </h1>
-          
+
           <p className="mt-4 sm:mt-6 text-base md:text-lg leading-7 sm:leading-8 text-gray-600 max-w-2xl mx-auto">
-            Push the button. Conform to expectations. Or simulate it convincingly.
+            Push the button. Conform to expectations. Or simulate it
+            convincingly.
           </p>
-          
+
           <div className="mt-8 sm:mt-10 flex items-center justify-center gap-x-6">
             <Link
               href="/wizard/industry"

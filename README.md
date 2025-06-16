@@ -3,6 +3,7 @@
 Welcome to my resume repository!
 
 This project explores the intersection of:
+
 - Generative identity formation
 - Surreal UX rituals
 - Late-capitalist compliance theater

@@ -1,7 +1,7 @@
-import { ReactNode, useState } from 'react';
-import FinalPreview from './FinalPreview';
-import MobilePreviewModal from './MobilePreviewModal';
-import { EyeIcon } from '@heroicons/react/24/outline';
+import { ReactNode, useState } from "react";
+import FinalPreview from "./FinalPreview";
+import MobilePreviewModal from "./MobilePreviewModal";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 interface WizardLayoutProps {
   children: ReactNode;
@@ -26,7 +26,10 @@ export default function WizardLayout({ children }: WizardLayoutProps) {
       <aside className="hidden lg:block lg:w-1/3 border-l p-6 overflow-auto">
         <FinalPreview />
       </aside>
-      <MobilePreviewModal isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
+      <MobilePreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+      />
     </div>
   );
-} 
+}

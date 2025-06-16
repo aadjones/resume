@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useWizard } from '../context/WizardContext';
+import { useRouter } from "next/navigation";
+import { useWizard } from "../context/WizardContext";
 
 interface StepControlsProps {
   step: number;
@@ -10,23 +10,33 @@ interface StepControlsProps {
   onBack: () => void;
 }
 
-export default function StepControls({ step, total, onNext, onBack }: StepControlsProps) {
+export default function StepControls({
+  step,
+  total,
+  onNext,
+  onBack,
+}: StepControlsProps) {
   const router = useRouter();
   const { setIndustry } = useWizard();
-  
+
   const getStepName = (stepNumber: number) => {
     switch (stepNumber) {
-      case 0: return 'Profile';
-      case 1: return 'Experience';
-      case 2: return 'Skills';
-      case 3: return 'Review';
-      default: return '';
+      case 0:
+        return "Profile";
+      case 1:
+        return "Experience";
+      case 2:
+        return "Skills";
+      case 3:
+        return "Review";
+      default:
+        return "";
     }
   };
 
   const handleBackToIndustry = () => {
-    setIndustry('tech'); // Reset to default industry, which will clear all content
-    router.push('/wizard/industry');
+    setIndustry("tech"); // Reset to default industry, which will clear all content
+    router.push("/wizard/industry");
   };
 
   return (
@@ -46,7 +56,7 @@ export default function StepControls({ step, total, onNext, onBack }: StepContro
           ← Back to {getStepName(step - 1)}
         </button>
       )}
-      
+
       {step < total - 1 && (
         <button
           onClick={onNext}
@@ -55,7 +65,7 @@ export default function StepControls({ step, total, onNext, onBack }: StepContro
           Continue to {getStepName(step + 1)} →
         </button>
       )}
-      
+
       {step === total - 1 && (
         <button
           onClick={onNext}
@@ -66,4 +76,4 @@ export default function StepControls({ step, total, onNext, onBack }: StepContro
       )}
     </div>
   );
-} 
+}

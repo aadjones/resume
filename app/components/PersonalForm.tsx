@@ -1,18 +1,32 @@
-'use client';
+"use client";
 
-import { useWizard } from '../context/WizardContext';
-import ObjectiveForm from './ObjectiveForm';
-import FormLayout from './FormLayout';
-import { BUTTON_STYLES, BUTTON_TEXT, DISTORTION_MULTIPLIERS } from '../constants/ui-strings';
-import { survivalPhrases, locations } from '../data/survival-phrases';
+import { useWizard } from "../context/WizardContext";
+import ObjectiveForm from "./ObjectiveForm";
+import FormLayout from "./FormLayout";
+import {
+  BUTTON_STYLES,
+  BUTTON_TEXT,
+  DISTORTION_MULTIPLIERS,
+} from "../constants/ui-strings";
+import { survivalPhrases, locations } from "../data/survival-phrases";
 
 export default function PersonalForm() {
-  const { identity, setIdentity, content, setContent, industry, incrementDistortionIndex } = useWizard();
+  const {
+    identity,
+    setIdentity,
+    content,
+    setContent,
+    industry,
+    incrementDistortionIndex,
+  } = useWizard();
 
-  const handleIdentityChange = (field: 'name' | 'city' | 'email', value: string) => {
+  const handleIdentityChange = (
+    field: "name" | "city" | "email",
+    value: string,
+  ) => {
     setIdentity({
       ...identity,
-      [field]: value
+      [field]: value,
     });
   };
 
@@ -26,22 +40,23 @@ export default function PersonalForm() {
   const handleAutofillAll = () => {
     // Generate random applicant number
     const applicantNumber = getRandomNumber();
-    
+
     // Update identity with new random values
     setIdentity({
       name: `Applicant #${applicantNumber}`,
       city: getRandomCity(),
-      email: `applicant.${applicantNumber}@flow.io`
+      email: `applicant.${applicantNumber}@flow.io`,
     });
 
     // Get random objective
     const objectives = survivalPhrases[industry].objective;
-    const randomObjective = objectives[Math.floor(Math.random() * objectives.length)];
-    
+    const randomObjective =
+      objectives[Math.floor(Math.random() * objectives.length)];
+
     // Update content with new random objective
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      objective: randomObjective
+      objective: randomObjective,
     }));
 
     // Increment distortion index for bulk autofill
@@ -54,7 +69,9 @@ export default function PersonalForm() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold mb-1">Personal Details</h1>
-            <p className="text-gray-600">Add your contact information and career objective</p>
+            <p className="text-gray-600">
+              Add your contact information and career objective
+            </p>
           </div>
           <button
             onClick={handleAutofillAll}
@@ -67,22 +84,29 @@ export default function PersonalForm() {
         <div className="space-y-4">
           <div>
             <label className="block">
-              <span className="text-sm font-medium text-gray-700">Display Name</span>
+              <span className="text-sm font-medium text-gray-700">
+                Display Name
+              </span>
               <div className="space-y-2">
                 <input
                   type="text"
                   id="name"
                   value={identity.name}
-                  onChange={(e) => handleIdentityChange('name', e.target.value)}
+                  onChange={(e) => handleIdentityChange("name", e.target.value)}
                   className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   placeholder="Enter your name"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
-                      handleIdentityChange('name', `Applicant #${getRandomNumber()}`);
+                      handleIdentityChange(
+                        "name",
+                        `Applicant #${getRandomNumber()}`,
+                      );
                       // Increment distortion index for individual field autofill
-                      incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                      incrementDistortionIndex(
+                        DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                      );
                     }}
                     className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                   >
@@ -102,16 +126,20 @@ export default function PersonalForm() {
                     type="text"
                     id="city"
                     value={identity.city}
-                    onChange={(e) => handleIdentityChange('city', e.target.value)}
+                    onChange={(e) =>
+                      handleIdentityChange("city", e.target.value)
+                    }
                     className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Enter your city"
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={() => {
-                        handleIdentityChange('city', getRandomCity());
+                        handleIdentityChange("city", getRandomCity());
                         // Increment distortion index for individual field autofill
-                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                        incrementDistortionIndex(
+                          DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                        );
                       }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
@@ -130,16 +158,23 @@ export default function PersonalForm() {
                     type="email"
                     id="email"
                     value={identity.email}
-                    onChange={(e) => handleIdentityChange('email', e.target.value)}
+                    onChange={(e) =>
+                      handleIdentityChange("email", e.target.value)
+                    }
                     className="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Enter your email"
                   />
                   <div className="flex gap-2">
                     <button
                       onClick={() => {
-                        handleIdentityChange('email', `applicant.${getRandomNumber()}@flow.io`);
+                        handleIdentityChange(
+                          "email",
+                          `applicant.${getRandomNumber()}@flow.io`,
+                        );
                         // Increment distortion index for individual field autofill
-                        incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
+                        incrementDistortionIndex(
+                          DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD,
+                        );
                       }}
                       className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                     >
@@ -156,4 +191,4 @@ export default function PersonalForm() {
       </div>
     </FormLayout>
   );
-} 
+}

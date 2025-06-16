@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from 'puppeteer';
+import { NextApiRequest, NextApiResponse } from "next";
+import puppeteer from "puppeteer";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   try {
@@ -20,19 +20,19 @@ export default async function handler(
 
     // Navigate to the preview URL (hardcoded for now)
     // TODO: Replace with actual preview URL from context
-    await page.goto('http://localhost:3000/preview', {
-      waitUntil: 'networkidle0',
+    await page.goto("http://localhost:3000/preview", {
+      waitUntil: "networkidle0",
     });
 
     // Generate PDF
     const pdf = await page.pdf({
-      format: 'A4',
+      format: "A4",
       printBackground: true,
       margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px',
+        top: "20px",
+        right: "20px",
+        bottom: "20px",
+        left: "20px",
       },
     });
 
@@ -40,11 +40,11 @@ export default async function handler(
     await browser.close();
 
     // Set headers and send PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=resume.pdf");
     res.send(pdf);
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    res.status(500).json({ message: 'Error generating PDF' });
+    console.error("Error generating PDF:", error);
+    res.status(500).json({ message: "Error generating PDF" });
   }
-} 
+}

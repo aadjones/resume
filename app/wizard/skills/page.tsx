@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import SkillsForm from '../../components/SkillsForm';
-import WizardPageLayout from '../../components/WizardPageLayout';
+import SkillsForm from "../../components/SkillsForm";
+import WizardPageLayout from "../../components/WizardPageLayout";
 
 export default function SkillsStep() {
   return (
@@ -13,4 +13,4 @@ export default function SkillsStep() {
       <SkillsForm />
     </WizardPageLayout>
   );
-} 
+}

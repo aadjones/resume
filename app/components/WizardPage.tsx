@@ -1,42 +1,46 @@
-'use client';
+"use client";
 
-import { useRouter, usePathname } from 'next/navigation';
-import { useWizard } from '../context/WizardContext';
-import PersonalForm from './PersonalForm';
-import ExperienceForm from './ExperienceForm';
-import SkillsForm from './SkillsForm';
-import FinalPreview from './FinalPreview';
-import StepControls from './StepControls';
-import ResumePreview from './ResumePreview';
+import { useRouter, usePathname } from "next/navigation";
+import { useWizard } from "../context/WizardContext";
+import PersonalForm from "./PersonalForm";
+import ExperienceForm from "./ExperienceForm";
+import SkillsForm from "./SkillsForm";
+import FinalPreview from "./FinalPreview";
+import StepControls from "./StepControls";
+import ResumePreview from "./ResumePreview";
 
 // Map URLs to step indices
 const STEP_MAPPING = {
-  'profile': 0,
-  'experience': 1,
-  'skills': 2,
-  'review': 3
+  profile: 0,
+  experience: 1,
+  skills: 2,
+  review: 3,
 } as const;
 
 type Step = keyof typeof STEP_MAPPING;
 
 export default function WizardPage() {
   const router = useRouter();
-  const pathname = usePathname() || '/wizard/profile';
+  const pathname = usePathname() || "/wizard/profile";
   const { content } = useWizard();
-  
+
   // Extract the current step from the pathname and get its index
-  const currentStep = (pathname.split('/').pop() || 'profile') as Step;
+  const currentStep = (pathname.split("/").pop() || "profile") as Step;
   const step = STEP_MAPPING[currentStep] ?? 0;
 
   const handleNext = () => {
-    const nextStep = Object.entries(STEP_MAPPING).find(([_, idx]) => idx === step + 1)?.[0];
+    const nextStep = Object.entries(STEP_MAPPING).find(
+      ([_, idx]) => idx === step + 1,
+    )?.[0];
     if (nextStep) {
       router.push(`/wizard/${nextStep}`);
     }
   };
 
   const handleBack = () => {
-    const prevStep = Object.entries(STEP_MAPPING).find(([_, idx]) => idx === step - 1)?.[0];
+    const prevStep = Object.entries(STEP_MAPPING).find(
+      ([_, idx]) => idx === step - 1,
+    )?.[0];
     if (prevStep) {
       router.push(`/wizard/${prevStep}`);
     }
@@ -51,10 +55,10 @@ export default function WizardPage() {
           {step === 1 && <ExperienceForm />}
           {step === 2 && <SkillsForm />}
           {step === 3 && <FinalPreview />}
-          
+
           {/* Sticky Navigation Footer */}
           <div className="fixed bottom-0 left-0 w-[50%] bg-white dark:bg-gray-900 border-t p-4">
-            <StepControls 
+            <StepControls
               step={step}
               total={4}
               onBack={handleBack}
@@ -72,4 +76,4 @@ export default function WizardPage() {
       </div>
     </div>
   );
-} 
+}

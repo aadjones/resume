@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useWizard } from '../../context/WizardContext';
-import ResidualSelfhoodReport from '../../components/ResidualSelfhoodReport';
+import { useRouter } from "next/navigation";
+import { useWizard } from "../../context/WizardContext";
+import ResidualSelfhoodReport from "../../components/ResidualSelfhoodReport";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function ReportPage() {
 
   const handleStartOver = () => {
     resetWizard();
-    router.push('/wizard/industry');
+    router.push("/wizard/industry");
   };
 
   return (
@@ -33,4 +33,4 @@ export default function ReportPage() {
       </div>
     </div>
   );
-} 
+}

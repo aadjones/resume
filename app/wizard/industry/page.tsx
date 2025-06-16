@@ -1,20 +1,25 @@
-'use client';
-import { useWizard } from '../../context/WizardContext';
-import { useRouter } from 'next/navigation';
-import { BUTTON_TEXT, DISTORTION_MULTIPLIERS } from '../../constants/ui-strings';
+"use client";
+import { useWizard } from "../../context/WizardContext";
+import { useRouter } from "next/navigation";
+import {
+  BUTTON_TEXT,
+  DISTORTION_MULTIPLIERS,
+} from "../../constants/ui-strings";
 
-type Industry = 'tech' | 'service' | 'healthcare';
+type Industry = "tech" | "service" | "healthcare";
 
 export default function IndustryStep() {
   const { industry, setIndustry, incrementDistortionIndex } = useWizard();
   const router = useRouter();
 
-  const industries: Industry[] = ['tech', 'service', 'healthcare'];
+  const industries: Industry[] = ["tech", "service", "healthcare"];
 
   const handleAutofill = () => {
-    const unselectedIndustries = industries.filter(ind => ind !== industry);
+    const unselectedIndustries = industries.filter((ind) => ind !== industry);
     if (unselectedIndustries.length > 0) {
-      const randomIndex = Math.floor(Math.random() * unselectedIndustries.length);
+      const randomIndex = Math.floor(
+        Math.random() * unselectedIndustries.length,
+      );
       setIndustry(unselectedIndustries[randomIndex]);
       incrementDistortionIndex(DISTORTION_MULTIPLIERS.INDIVIDUAL_FIELD);
     }
@@ -25,7 +30,9 @@ export default function IndustryStep() {
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-2xl font-bold mb-1">Choose Your Industry</h1>
-          <p className="text-gray-600">Select the industry that best matches your experience</p>
+          <p className="text-gray-600">
+            Select the industry that best matches your experience
+          </p>
         </div>
         <button
           onClick={handleAutofill}
@@ -40,9 +47,9 @@ export default function IndustryStep() {
           <label
             key={opt}
             className={`block p-6 border rounded-lg cursor-pointer transition-colors ${
-              industry === opt 
-                ? 'bg-blue-50 border-blue-300 dark:bg-blue-900/50 dark:border-blue-700' 
-                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+              industry === opt
+                ? "bg-blue-50 border-blue-300 dark:bg-blue-900/50 dark:border-blue-700"
+                : "border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
             }`}
           >
             <div className="flex items-center">
@@ -61,11 +68,11 @@ export default function IndustryStep() {
           </label>
         ))}
       </div>
-      
+
       {industry && (
         <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4">
           <button
-            onClick={() => router.push('/wizard/profile')}
+            onClick={() => router.push("/wizard/profile")}
             className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
           >
             Continue →
@@ -74,4 +81,4 @@ export default function IndustryStep() {
       )}
     </div>
   );
-} 
+}

@@ -12,10 +12,12 @@ const AURA_SPECTRUM = [
   "Muted Beige",
   "Soft Blue",
   "Bleeding Magenta",
-  "Glitching Violet"
+  "Glitching Violet",
 ] as const;
 
-export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelfhoodReport {
+export function getResidualSelfhoodReport(
+  distortionIndex: number,
+): ResidualSelfhoodReport {
   // Calculate residual humanity (minimum 0)
   const residualHumanity = Math.max(0, 100 - distortionIndex * 5);
 
@@ -23,7 +25,10 @@ export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelf
   const corporateCompliance = Math.min(100, distortionIndex * 5);
 
   // Calculate soul fragments (minimum 0)
-  const soulFragmentsDetected = Math.max(0, 4 - Math.floor(distortionIndex / 5));
+  const soulFragmentsDetected = Math.max(
+    0,
+    4 - Math.floor(distortionIndex / 5),
+  );
 
   // Determine dominant aura based on distortion index
   const auraIndex = Math.min(distortionIndex, AURA_SPECTRUM.length - 1);
@@ -32,13 +37,17 @@ export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelf
   // Generate warning based on residual humanity
   let warning: string;
   if (residualHumanity >= 80) {
-    warning = "Your essence remains largely intact. Consider recalibration for better corporate alignment.";
+    warning =
+      "Your essence remains largely intact. Consider recalibration for better corporate alignment.";
   } else if (residualHumanity >= 50) {
-    warning = "Significant distortion detected. Your corporate compliance needs improvement.";
+    warning =
+      "Significant distortion detected. Your corporate compliance needs improvement.";
   } else if (residualHumanity >= 20) {
-    warning = "Critical levels of corporate assimilation. You're on the right track.";
+    warning =
+      "Critical levels of corporate assimilation. You're on the right track.";
   } else {
-    warning = "Excellent corporate convergence achieved. You're a model employee.";
+    warning =
+      "Excellent corporate convergence achieved. You're a model employee.";
   }
 
   return {
@@ -46,6 +55,6 @@ export function getResidualSelfhoodReport(distortionIndex: number): ResidualSelf
     corporateCompliance,
     soulFragmentsDetected,
     dominantAura,
-    warning
+    warning,
   };
-} 
+}

@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { useWizard } from '../context/WizardContext';
-import { survivalPhrases } from '../data/survival-phrases';
-import { BUTTON_STYLES, BUTTON_TEXT } from '../constants/ui-strings';
+import { useWizard } from "../context/WizardContext";
+import { survivalPhrases } from "../data/survival-phrases";
+import { BUTTON_STYLES, BUTTON_TEXT } from "../constants/ui-strings";
 
 export default function ObjectiveForm() {
   const { content, setContent, industry } = useWizard();
 
   const handleObjectiveChange = (value: string) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
-      objective: value
+      objective: value,
     }));
   };
 
   const handleAutofill = () => {
     const objectives = survivalPhrases[industry].objective;
-    const randomObjective = objectives[Math.floor(Math.random() * objectives.length)];
+    const randomObjective =
+      objectives[Math.floor(Math.random() * objectives.length)];
     handleObjectiveChange(randomObjective);
   };
 
@@ -33,10 +34,7 @@ export default function ObjectiveForm() {
             rows={4}
           />
           <div className="flex gap-2">
-            <button
-              onClick={handleAutofill}
-              className={BUTTON_STYLES.ACTION}
-            >
+            <button onClick={handleAutofill} className={BUTTON_STYLES.ACTION}>
               {BUTTON_TEXT.AUTO_FILL}
             </button>
           </div>
@@ -44,4 +42,4 @@ export default function ObjectiveForm() {
       </label>
     </div>
   );
-} 
+}

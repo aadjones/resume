@@ -1,14 +1,17 @@
-import { Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import MobileResumePreview from './MobileResumePreview';
+import { Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import MobileResumePreview from "./MobileResumePreview";
 
 interface MobilePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function MobilePreviewModal({ isOpen, onClose }: MobilePreviewModalProps) {
+export default function MobilePreviewModal({
+  isOpen,
+  onClose,
+}: MobilePreviewModalProps) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -56,4 +59,4 @@ export default function MobilePreviewModal({ isOpen, onClose }: MobilePreviewMod
       </Dialog>
     </Transition.Root>
   );
-} 
+}

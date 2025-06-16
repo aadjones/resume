@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import { EyeIcon } from '@heroicons/react/24/outline';
-import ResumePreview from './ResumePreview';
-import MobilePreviewModal from './MobilePreviewModal';
-import { useState } from 'react';
+import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { EyeIcon } from "@heroicons/react/24/outline";
+import ResumePreview from "./ResumePreview";
+import MobilePreviewModal from "./MobilePreviewModal";
+import { useState } from "react";
 
 interface WizardPageLayoutProps {
   children: ReactNode;
@@ -12,11 +12,11 @@ interface WizardPageLayoutProps {
   nextButtonText?: string;
 }
 
-export default function WizardPageLayout({ 
-  children, 
+export default function WizardPageLayout({
+  children,
   previousStep,
   nextStep,
-  nextButtonText = 'Continue'
+  nextButtonText = "Continue",
 }: WizardPageLayoutProps) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function WizardPageLayout({
         {/* Form */}
         <div className="w-full lg:w-1/2 pb-20 lg:pb-0">
           {children}
-          
+
           {/* Mobile Preview Button */}
           <button
             onClick={() => setIsPreviewOpen(true)}
@@ -65,10 +65,10 @@ export default function WizardPageLayout({
       </div>
 
       {/* Mobile Preview Modal */}
-      <MobilePreviewModal 
-        isOpen={isPreviewOpen} 
-        onClose={() => setIsPreviewOpen(false)} 
+      <MobilePreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
       />
     </>
   );
-} 
+}

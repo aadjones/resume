@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { Slot } from '@radix-ui/react-slot';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { WizardProvider, useWizard } from '../context/WizardContext';
-import ThemeToggle from '../components/ThemeToggle';
+import { Slot } from "@radix-ui/react-slot";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
+import { WizardProvider, useWizard } from "../context/WizardContext";
+import ThemeToggle from "../components/ThemeToggle";
 
 // Map URLs to step indices
 const STEP_MAPPING = {
-  'industry': 0,
-  'profile': 1,
-  'experience': 2,
-  'skills': 3,
-  'review': 4
+  industry: 0,
+  profile: 1,
+  experience: 2,
+  skills: 3,
+  review: 4,
 } as const;
 
 type Step = keyof typeof STEP_MAPPING;
@@ -25,10 +25,10 @@ function WizardLayoutContent({
   params: { step: Step };
 }) {
   const router = useRouter();
-  const pathname = usePathname() || '/wizard/industry';
-  
+  const pathname = usePathname() || "/wizard/industry";
+
   // Extract the current step from the pathname and get its index
-  const currentStep = (pathname.split('/').pop() || 'industry') as Step;
+  const currentStep = (pathname.split("/").pop() || "industry") as Step;
   const currentStepIndex = STEP_MAPPING[currentStep] ?? 0;
 
   return (
@@ -41,8 +41,8 @@ function WizardLayoutContent({
               key={index}
               className={`w-2.5 h-2.5 rounded-full transition-colors duration-200 ${
                 index === currentStepIndex
-                  ? 'bg-blue-500'
-                  : 'bg-gray-200 dark:bg-gray-700'
+                  ? "bg-blue-500"
+                  : "bg-gray-200 dark:bg-gray-700"
               }`}
             />
           ))}
@@ -50,14 +50,14 @@ function WizardLayoutContent({
         <div className="flex-1" />
         <ThemeToggle />
       </header>
-      <main className="flex-1 p-8">
-        {children}
-      </main>
+      <main className="flex-1 p-8">{children}</main>
       <footer className="border-t p-4">
         {currentStepIndex > 0 && (
           <button
             onClick={() => {
-              const prevStep = Object.entries(STEP_MAPPING).find(([_, idx]) => idx === currentStepIndex - 1)?.[0];
+              const prevStep = Object.entries(STEP_MAPPING).find(
+                ([_, idx]) => idx === currentStepIndex - 1,
+              )?.[0];
               if (prevStep) {
                 router.push(`/wizard/${prevStep}`);
               }
@@ -77,9 +77,5 @@ export default function WizardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <WizardProvider>
-      {children}
-    </WizardProvider>
-  );
-} 
+  return <WizardProvider>{children}</WizardProvider>;
+}

@@ -1,8 +1,14 @@
-'use client';
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { generateApplicantHeader } from '../../lib/generateApplicantHeader';
+"use client";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { generateApplicantHeader } from "../../lib/generateApplicantHeader";
 
-type Industry = 'tech' | 'service' | 'healthcare';
+type Industry = "tech" | "service" | "healthcare";
 
 export type ExperienceEntry = {
   company: string;
@@ -33,16 +39,16 @@ type WizardState = {
 const WizardContext = createContext<WizardState | undefined>(undefined);
 
 export function WizardProvider({ children }: { children: ReactNode }) {
-  const [industry, setIndustryState] = useState<Industry>('tech');
-  const [identity, setIdentity] = useState({ 
-    name: '',
-    city: '',
-    email: ''
+  const [industry, setIndustryState] = useState<Industry>("tech");
+  const [identity, setIdentity] = useState({
+    name: "",
+    city: "",
+    email: "",
   });
-  const [content, setContent] = useState<ContentState>({ 
-    objective: '',
+  const [content, setContent] = useState<ContentState>({
+    objective: "",
     experience: [],
-    skills: []
+    skills: [],
   });
   const [distortionIndex, setDistortionIndex] = useState(0);
 
@@ -51,35 +57,37 @@ export function WizardProvider({ children }: { children: ReactNode }) {
     setIndustryState(newIndustry);
     // Clear all content when industry changes
     setContent({
-      objective: '',
+      objective: "",
       experience: [],
-      skills: []
+      skills: [],
     });
   };
 
   const incrementDistortionIndex = (amount: number) => {
-    setDistortionIndex(prev => prev + amount);
+    setDistortionIndex((prev) => prev + amount);
   };
 
   const resetWizard = () => {
-    setIndustryState('tech');
-    setIdentity({ name: '', city: '', email: '' });
-    setContent({ objective: '', experience: [], skills: [] });
+    setIndustryState("tech");
+    setIdentity({ name: "", city: "", email: "" });
+    setContent({ objective: "", experience: [], skills: [] });
     setDistortionIndex(0);
   };
 
   return (
-    <WizardContext.Provider value={{ 
-      industry, 
-      setIndustry, 
-      identity, 
-      setIdentity, 
-      content, 
-      setContent,
-      distortionIndex,
-      incrementDistortionIndex,
-      resetWizard
-    }}>
+    <WizardContext.Provider
+      value={{
+        industry,
+        setIndustry,
+        identity,
+        setIdentity,
+        content,
+        setContent,
+        distortionIndex,
+        incrementDistortionIndex,
+        resetWizard,
+      }}
+    >
       {children}
     </WizardContext.Provider>
   );
@@ -88,7 +96,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
 export function useWizard() {
   const context = useContext(WizardContext);
   if (context === undefined) {
-    throw new Error('useWizard must be used within a WizardProvider');
+    throw new Error("useWizard must be used within a WizardProvider");
   }
   return context;
-} 
+}

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface ProgressBarProps {
   step: number;
@@ -15,13 +15,13 @@ export default function ProgressBar({ step, total }: ProgressBarProps) {
           key={index}
           className={`w-3 h-3 rounded-full transition-colors duration-200 ${
             index === step
-              ? 'bg-blue-500'
+              ? "bg-blue-500"
               : index < step
-              ? 'bg-blue-300'
-              : 'bg-gray-200'
+                ? "bg-blue-300"
+                : "bg-gray-200"
           }`}
         />
       ))}
     </div>
   );
-} 
+}
