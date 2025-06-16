@@ -42,7 +42,8 @@ export default function ResidualSelfhoodReport({ distortionIndex }: ResidualSelf
     const timeouts: NodeJS.Timeout[] = [];
 
     // Start staggered animations
-    Object.keys(values).forEach((key, index) => {
+    const keys = ['residualHumanity', 'corporateCompliance', 'soulFragments', 'warning'];
+    keys.forEach((key, index) => {
       const timeout = setTimeout(() => {
         setValues(prev => ({
           ...prev,
