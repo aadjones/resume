@@ -1,6 +1,7 @@
 "use client";
 
 import { useWizard } from "../context/WizardContext";
+import "../../styles/pdf.css";
 
 export default function FinalPreview() {
   const { identity, content } = useWizard();
@@ -11,7 +12,7 @@ export default function FinalPreview() {
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-8">
       <div
         id="resume-preview-content"
-        className="bg-white mx-auto shadow-lg border border-gray-200"
+        className="pdf-resume bg-white mx-auto shadow-lg border border-gray-200"
         style={{
           width: "8.5in",
           padding: "0.75in",

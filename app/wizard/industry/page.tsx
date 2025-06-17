@@ -70,10 +70,10 @@ export default function IndustryStep() {
       </div>
 
       {industry && (
-        <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4">
+        <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-center">
           <button
             onClick={() => router.push("/wizard/profile")}
-            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+            className="w-full max-w-md px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
           >
             Continue →
           </button>
