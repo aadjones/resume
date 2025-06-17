@@ -6,6 +6,7 @@ import WizardPageLayout from "../../components/WizardPageLayout";
 import MobileResumePreview from "../../components/MobileResumePreview";
 import { useEffect, useState } from "react";
 import { FEATURE_FLAGS } from "../../config/feature-flags";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export default function ReviewStep() {
   const router = useRouter();
@@ -26,22 +27,25 @@ export default function ReviewStep() {
       </div>
 
       {/* Fixed footer */}
-      <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-between items-center">
-        <button
-          onClick={() => router.push("/wizard/skills")}
-          className="px-6 py-2 text-gray-600 hover:text-gray-800"
-        >
-          ← Back to Skills
-        </button>
-
-        {FEATURE_FLAGS.ENABLE_RESIDUAL_REPORT && (
+      <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex justify-center">
+        <div className="w-full max-w-2xl flex justify-between items-center gap-4">
           <button
-            onClick={() => router.push("/wizard/report")}
-            className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
+            onClick={() => router.push("/wizard/skills")}
+            className="px-6 py-2 text-gray-600 hover:text-gray-800"
           >
-            Assess Residual Selfhood
+            ← Back to Skills
           </button>
-        )}
+
+          {FEATURE_FLAGS.ENABLE_RESIDUAL_REPORT && (
+            <button
+              onClick={() => router.push("/wizard/report")}
+              className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium text-lg shadow-lg transform transition hover:scale-105 flex items-center gap-2"
+            >
+              Assess Residual Selfhood
+              <HiOutlineArrowNarrowRight className="h-5 w-5" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

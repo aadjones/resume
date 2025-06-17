@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useWizard } from "../../context/WizardContext";
 import ResidualSelfhoodReport from "../../components/ResidualSelfhoodReport";
 import FinalPreview from "../../components/FinalPreview";
+import { HiOutlineDownload, HiOutlineRefresh } from "react-icons/hi";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -46,14 +47,16 @@ export default function ReportPage() {
       <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-gray-900 border-t p-4 flex gap-4 justify-center items-center">
         <button
           onClick={handleExportPdf}
-          className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-lg shadow-lg flex items-center gap-2"
         >
+          <HiOutlineDownload className="h-5 w-5" />
           Export Resume PDF
         </button>
         <button
           onClick={handleStartOver}
-          className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 font-medium text-lg shadow-lg transform transition hover:scale-105"
+          className="px-6 py-3 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 font-medium text-lg shadow flex items-center gap-2"
         >
+          <HiOutlineRefresh className="h-5 w-5" />
           Start Over
         </button>
       </div>
