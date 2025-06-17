@@ -38,4 +38,22 @@ body {
     /* we'll override this from Puppeteer */
     transform: scale(1);
   }
+
+  /* Use custom bullets for reliable vertical alignment */
+  #resume-preview-content ul {
+    list-style: none;
+    padding-left: 1rem;
+  }
+
+  #resume-preview-content li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.25rem;
+  }
+
+  #resume-preview-content li::before {
+    content: "\2022"; /* bullet */
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
 }
