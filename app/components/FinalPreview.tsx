@@ -63,7 +63,7 @@ export default function FinalPreview() {
                 </div>
                 {exp.responsibilities.filter((resp) => resp.trim() !== "")
                   .length > 0 && (
-                  <ul className="list-disc ml-4 text-sm">
+                  <ul className="list-disc list-inside ml-2 text-sm leading-tight">
                     {exp.responsibilities
                       .filter((resp) => resp.trim() !== "")
                       .map((resp, i) => (
@@ -83,7 +83,7 @@ export default function FinalPreview() {
             Skills
           </h2>
           {skills.length > 0 && skills[0] !== "" && (
-            <ul className="list-disc ml-4 text-sm">
+            <ul className="list-disc list-inside ml-2 text-sm leading-tight">
               {skills.map((skill, i) => (
                 <li key={i} className="mb-0.5">
                   {skill}
